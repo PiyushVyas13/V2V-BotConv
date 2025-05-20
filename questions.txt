@@ -138,3 +138,8 @@ What are the conditions under which Confidential Information can be disclosed to
 How long do confidentiality obligations survive after the termination of the agreement?
 
 What is the defined “Purpose” for which confidential information may be used?
+
+Tabular format - markdown
+chat Logo clickabel clickable website
+AI life
+chat dates and database
