@@ -718,6 +718,32 @@
         let isStreaming = false;
         let currentAudio = null; // Track the current audio object
 
+        // Function to stream audio from the backend
+        async function streamAudio(text, history) {
+            if (isMuted) return;
+
+            try {
+                const response = await fetch("/stream_audio", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        text,
+                        history: history || []
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error ${response.status}`);
+                }
+
+                const audioBlob = await response.blob();
+                playAudio(audioBlob);
+            } catch (error) {
+                console.error('Audio streaming error:', error);
+                throw error;
+            }
+        }
+
         // Initialize mute button state
         const muteButton = document.getElementById('mute-button');
         updateMuteButton();
