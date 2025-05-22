@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PG Glass Chatbot</title>
+    <title>PGP-GPT</title>
     <style>
+
         * {
             margin: 0;
             padding: 0;
@@ -167,45 +168,40 @@
             letter-spacing: -0.01em;
         }
 
-        /* Table styles */
+        /* Table styles - exact copy from index2.html */
         .message-bubble table {
             width: 100%;
             border-collapse: collapse;
             margin: 10px 0;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.1); /* Adjusted to match index2.html */
             border-radius: 8px;
             overflow: hidden;
-            border: 1px solid rgba(255, 107, 53, 0.3);
         }
 
         .message-bubble th {
-            background: rgba(255, 107, 53, 0.2);
-            color: #FF6B35;
+            background: #f55a2187; /* Blue-like header background from index2.html */
+            color: #FF6B35; /* Blue-like header text color from index2.html */
             font-weight: 600;
             padding: 12px;
             text-align: left;
-            border: 1px solid rgba(255, 107, 53, 0.3);
-            white-space: normal;
+            border: 1px solid #FF6B35; /* Blue-like border from index2.html */
+            white-space: normal; /* Ensure wrapping for long content */
         }
 
         .message-bubble td {
             padding: 10px 12px;
-            border: 1px solid rgba(255, 107, 53, 0.3);
-            white-space: normal;
-            vertical-align: top;
-            color: #e5e7eb;
+            border: 1px solid #FF6B35; /* Blue-like border from index2.html */
+            white-space: normal; /* Ensure wrapping for long content */
+            vertical-align: top; /* Align cell content to top */
+            color: #e5e7eb; /* Keep the message bubble text color */
         }
 
-        .message-bubble tbody tr:nth-child(even) {
-            background: rgba(255, 107, 53, 0.05);
-        }
-
-        .message-bubble tr:last-child td {
-            border-bottom: 1px solid rgba(255, 107, 53, 0.3);
+        .message-bubble tr:nth-child(even) {
+             background: rgba(37, 99, 235, 0.05); /* Alternating row background from index2.html */
         }
 
         .message-bubble tr:hover {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(37, 99, 235, 0.1); /* Hover effect background from index2.html */
         }
 
         /* Document header styles */
@@ -617,6 +613,32 @@
             margin: 20px 0 10px 0;
             font-size: 1.1em;
         }
+
+        .mute-slash {
+            /* Initially hidden, controlled by JS */
+            display: none;
+        }
+
+        .sound-waves {
+            /* Initially visible, controlled by JS */
+            display: block;
+        }
+
+        .mute-button.muted .mute-slash {
+            display: block;
+        }
+
+        .mute-button.muted .sound-waves {
+            display: none;
+        }
+
+        .mute-button.glowing {
+             animation: glow 0.8s infinite alternate ease-in-out;
+        }
+
+        .send-button.glowing {
+             animation: glow 0.8s infinite alternate ease-in-out;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -642,7 +664,7 @@
         <!-- Header Component -->
         <div class="header">
             <img src="/static/images/logo2.png" alt="PG Glass Logo" class="logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/50x50?text=Logo+Error';">
-            <h1>PG Glass Chatbot</h1>
+            <h1>PGP-GPT</h1>
             <div class="toggle-container">
                 <button class="sheets-button" id="sheets-button" onclick="toggleSheetsMode()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -669,7 +691,7 @@
                 </svg>
                 <svg id="stop-icon" style="display: none;" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="12" cy="12" r="10" stroke="#e5e7eb" stroke-width="2"/>
-                    <rect x="9" y="9" width="6" height="6" fill="#252526"/>
+                    <rect x="9" y="9" width="6" height="6" fill="#e5e7eb" rx="1.5" ry="1.5"/>
                 </svg>
             </button>
             <button class="mic-button" id="mic-button" onclick="toggleSpeechRecognition()">
@@ -682,9 +704,12 @@
             </button>
             <button class="mute-button" id="mute-button" onclick="toggleMute()">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Speaker cone - visible in both states -->
                     <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M19.07 4.93C20.9447 6.80528 21.9979 9.34836 21.9979 12C21.9979 14.6516 20.9447 17.1947 19.07 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mute-slash"/>
-                    <path d="M15.54 8.46C16.4774 9.39764 17.004 10.6692 17.004 11.995C17.004 13.3208 16.4774 14.5924 15.54 15.53" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mute-slash"/>
+                    <!-- Sound waves - visible when UNMUTED -->
+                    <path d="M15.54 8.46C16.4774 9.39764 17.004 10.6692 17.004 11.995C17.004 13.3208 16.4774 14.5924 15.54 15.53" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sound-waves"/>
+                    <path d="M19.07 4.93C20.9447 6.80528 21.9979 9.34836 21.9979 12C21.9979 14.6516 20.9447 17.1947 19.07 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sound-waves"/>
+                     <!-- Mute slash - visible when MUTED -->
                     <line x1="2" y1="2" x2="22" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="mute-slash"/>
                 </svg>
             </button>
@@ -692,7 +717,7 @@
 
         <!-- Footer Component -->
         <div class="footer">
-            Powered by <a href="https://darkslategray-weasel-292671.hostingersite.com/">AI LifeBot</a>
+            Powered by <a href="https://darkslategray-weasel-292671.hostingersite.com/"><img src="/static/images/logo1.jpg" alt="Logo" style="width: 24px; height: 24px; border-radius: 50%; vertical-align: middle; margin-right: 5px;">AI LifeBot</a>
         </div>
     </div>
 
@@ -726,7 +751,7 @@
                 const response = await fetch("/stream_audio", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
+                    body: JSON.stringify({
                         text,
                         history: history || []
                     })
@@ -761,10 +786,6 @@
         // Update mute button appearance
         function updateMuteButton() {
             muteButton.classList.toggle('muted', isMuted);
-            const muteSlashElements = muteButton.querySelectorAll('.mute-slash');
-            muteSlashElements.forEach(el => {
-                el.style.display = isMuted ? 'block' : 'none';
-            });
         }
 
         // Stop audio stream
@@ -782,12 +803,16 @@
             if (audioContext.state === 'running') {
                 audioContext.suspend();
             }
+            const muteButton = document.getElementById('mute-button');
+            muteButton.classList.remove('glowing');
         }
 
         // Play audio with interrupt capability
         function playAudio(audioData) {
             stopAudioStream(); // Interrupt any currently playing audio
             if (!isMuted) {
+                const muteButton = document.getElementById('mute-button');
+                muteButton.classList.add('glowing');
                 if (typeof audioData === 'string') {
                     // Handle base64 audio data
                     currentAudio = new Audio(`data:audio/mp3;base64,${audioData}`);
@@ -798,13 +823,14 @@
                 currentAudio.play().catch(e => displayError('Audio playback failed: ' + e.message));
                 currentAudio.onended = () => {
                     currentAudio = null;
+                    muteButton.classList.remove('glowing');
                 };
             }
         }
 
         // Load and sanitize chat history from local storage
         let chatHistory = [];
-        
+
         // Check if this is a fresh server load by checking a server timestamp
         fetch("/server_timestamp")
             .then(response => response.json())
@@ -866,7 +892,7 @@
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        // Configure marked options
+        // Configure marked options (using options from index2.html)
         marked.setOptions({
             breaks: true,
             gfm: true,
@@ -875,28 +901,17 @@
             sanitize: false,
             smartLists: true,
             smartypants: true,
-            xhtml: false,
-            tables: true
+            xhtml: false
         });
-
-        // Custom renderer for tables
-        const renderer = new marked.Renderer();
-        renderer.table = (header, body) => {
-            return `<table class="markdown-table">
-                <thead>${header}</thead>
-                <tbody>${body}</tbody>
-            </table>`;
-        };
-        marked.setOptions({ renderer: renderer });
 
         // Render a message without typing animation (for user messages and history)
         function renderMessage(message) {
             const div = document.createElement('div');
             div.className = `message ${message.role === 'assistant' ? 'bot' : message.role}-message`;
-            
-            // Parse the message text with marked
-            const parsedContent = marked.parse(message.text, { async: false });
-            
+
+            // Parse the message text with marked for bot messages (exact logic from index2.html)
+            const parsedContent = message.role === 'assistant' ? marked.parse(message.text) : message.text;
+
             div.innerHTML = `
                 ${message.role === 'assistant' ? '<img src="https://ui-avatars.com/api/?name=Bot&background=5A5A5A&color=e5e7eb&size=40" class="avatar bot-avatar" alt="Bot Avatar">' : ''}
                 <div class="message-bubble">
@@ -913,7 +928,7 @@
 
         // Render a message with typing animation and optional simultaneous audio
         async function typeMessage(message, audioText, sanitizedHistory, callback) {
-            const div = document.createElement('div');
+             const div = document.createElement('div');
             div.className = `message bot-message`;
             div.innerHTML = `
                 <img src="https://ui-avatars.com/api/?name=Bot&background=5A5A5A&color=e5e7eb&size=40" class="avatar bot-avatar" alt="Bot Avatar">
@@ -944,10 +959,10 @@
 
             function type() {
                 if (!isTyping) {
-                    if (div && div.parentNode) {
-                        messageTextElement.innerHTML = marked.parse(messageTextElement.textContent);
-                        MathJax.typesetPromise([div]).catch((err) => console.error('MathJax typesetting failed:', err));
-                    }
+                    // Ensure full content is rendered even if typing is interrupted
+                    messageTextElement.innerHTML = marked.parse(text); // Parse full markdown
+                    MathJax.typesetPromise([div]).catch((err) => console.error('MathJax typesetting failed:', err));
+                    if (callback) callback();
                     return;
                 }
 
@@ -955,10 +970,11 @@
                     messageTextElement.textContent += text.charAt(index);
                     index++;
                     scrollToBottom();
-                    typingTimeout = setTimeout(type, 5);
+                    typingTimeout = setTimeout(type, 0.5);
                 } else {
                     isTyping = false;
                     clearTimeout(typingTimeout);
+                    // Parse the full message text after typing is complete
                     messageTextElement.innerHTML = marked.parse(message.text);
                     MathJax.typesetPromise([div]).catch((err) => console.error('MathJax typesetting failed:', err));
                     if (callback) callback();
@@ -1011,15 +1027,15 @@
             sheetsModeEnabled = !sheetsModeEnabled;
             const sheetsButton = document.getElementById('sheets-button');
             const inputTextarea = document.getElementById('user-input');
-            
+
             sheetsButton.classList.toggle('active', sheetsModeEnabled);
-            inputTextarea.placeholder = sheetsModeEnabled ? 
-                "Type your message for Sheets..." : 
+            inputTextarea.placeholder = sheetsModeEnabled ?
+                "Type your message for Sheets..." :
                 "Type your message...";
         }
 
         // Modify the enqueueMessage function to handle sheets mode and interrupt
-        function enqueueMessage() {
+        async function enqueueMessage() {
             const input = document.getElementById('user-input');
             const text = input.value.trim();
             const sendButton = document.getElementById('send-button');
@@ -1047,33 +1063,53 @@
 
             if (sheetsModeEnabled) {
                 // Handle sheets mode
-                fetch("/sheets", {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        text,
-                        history: chatHistory.slice(-5)
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
+                try {
+                    sendButton.classList.add('processing');
+                    sendIcon.style.display = 'none';
+                    stopIcon.style.display = 'block';
+
+                    // Show loading state
+                    const loader = displayLoader();
+
+                    const response = await fetch("/sheets", {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            text,
+                            history: chatHistory.slice(-5)
+                        })
+                    });
+
+                    // Remove loader
+                    removeElement(loader);
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error ${response.status}`);
+                    }
+
+                    const data = await response.json();
+
                     if (data.status === "success") {
                         // Add success message to chat
                         const successMessage = {
                             role: 'assistant',
-                            text: `Successfully updated Google Sheets with: ${text}`,
+                            text: data.message, // Use the markdown table from the response
                             timestamp: new Date().toISOString()
                         };
                         chatHistory.push(successMessage);
                         localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
-                        renderMessage(successMessage);
+                        renderMessage(successMessage); // Render directly as the backend provides markdown
                     } else {
                         throw new Error(data.message || 'Failed to update sheets');
                     }
-                })
-                .catch(error => {
+                } catch (error) {
+                    console.error('Sheets error:', error);
                     displayError(`Error updating sheets: ${error.message}`);
-                });
+                } finally {
+                    sendButton.classList.remove('processing');
+                    sendIcon.style.display = 'block';
+                    stopIcon.style.display = 'none';
+                }
             } else {
                 // Handle normal chat mode
                 queryQueue.push({ text, isSpeech: lastInputWasSpeech });
@@ -1090,7 +1126,7 @@
         // Function to process the next query in the queue
         async function processNextQuery() {
             if (isProcessingQueue || queryQueue.length === 0) return;
-            
+
             const sendButton = document.getElementById('send-button');
             const sendIcon = document.getElementById('send-icon');
             const stopIcon = document.getElementById('stop-icon');
@@ -1100,14 +1136,18 @@
             sendIcon.style.display = 'none';
             stopIcon.style.display = 'block';
 
+            // *** NEW LOGIC: Add glowing class when processing starts ***
+            sendButton.classList.add('glowing');
+            // *** END NEW LOGIC ***
+
             const { text, isSpeech } = queryQueue.shift();
-            
+
             // Add user message to history and display immediately
-            const userMessage = { 
-                role: 'user', 
-                text, 
-                timestamp: new Date().toISOString(), 
-                isSpeech 
+            const userMessage = {
+                role: 'user',
+                text,
+                timestamp: new Date().toISOString(),
+                isSpeech
             };
             chatHistory.push(userMessage);
             localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
@@ -1129,8 +1169,8 @@
                 const response = await fetch("/chat", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        text, 
+                    body: JSON.stringify({
+                        text,
                         history: sanitizedHistory,
                         is_speech: isSpeech // Use the isSpeech from the queue item
                     })
@@ -1156,21 +1196,24 @@
                 if (data.error) throw new Error(data.error);
 
                 // Handle single response with typing animation and optional audio
-                const botMessage = { 
-                    role: 'assistant', 
+                const botMessage = {
+                    role: 'assistant',
                     text: data.responses[0],
                     timestamp: new Date().toISOString(),
                     isSpeech: isSpeech // Use the isSpeech from the queue item
                 };
                 chatHistory.push(botMessage);
                 localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
-                
+
                 // Use typeMessage for streaming effect and optional simultaneous audio
                 await typeMessage(botMessage, data.responses[0], sanitizedHistory, () => {
                     isProcessingQueue = false;
                     sendButton.classList.remove('processing');
                     sendIcon.style.display = 'block';
                     stopIcon.style.display = 'none';
+                    // *** NEW LOGIC: Remove glowing class when typing is complete ***
+                    sendButton.classList.remove('glowing');
+                    // *** END NEW LOGIC ***
                     processNextQuery(); // Process next query in queue
                 });
             } catch (error) {
@@ -1182,6 +1225,9 @@
                 sendButton.classList.remove('processing');
                 sendIcon.style.display = 'block';
                 stopIcon.style.display = 'none';
+                // *** NEW LOGIC: Remove glowing class on error ***
+                sendButton.classList.remove('glowing');
+                // *** END NEW LOGIC ***
                 processNextQuery(); // Process next query in queue
             }
         }
@@ -1206,6 +1252,12 @@
                 recognition.stop();
                 return;
             }
+
+            // *** NEW LOGIC: Stop audio if currently playing ***
+            if (isStreaming || currentAudio) {
+                stopAudioStream();
+            }
+            // *** END NEW LOGIC ***
 
             // Check microphone permission
             const hasPermission = await checkMicPermission();

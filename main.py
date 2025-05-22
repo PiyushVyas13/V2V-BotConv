@@ -96,6 +96,10 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     responses: List[str]
 
+class SheetRequest(BaseModel):
+    text: str
+    history: Optional[List[dict]] = []
+
 @app.get("/", response_class=HTMLResponse)
 async def get_index(request: Request):
     logger.info("Serving index page")
@@ -128,12 +132,38 @@ async def chat(request: ChatRequest):
         
         logger.info("Successfully generated response")
         return response
-        
+
     except Exception as e:
         logger.error(f"Chat error: {str(e)}")
         return {
             "responses": ["I apologize, but I encountered an error. Please try again."]
         }
+
+@app.post("/sheets")
+async def process_sheets(request: SheetRequest):
+    try:
+        logger.info(f"Received sheets request: {request.text}")
+        
+        if not request.text:
+            raise HTTPException(status_code=400, detail="No input provided")
+
+        # Import here to avoid circular imports
+        from sheet import llm_parse, get_last_sr_no, update_sheet
+
+        last_sr_no = await get_last_sr_no()
+        payload = await llm_parse(request.text, last_sr_no)
+        await update_sheet(payload)
+
+        return JSONResponse({
+            "status": "success",
+            "message": "Successfully updated Google Sheets"
+        })
+    except Exception as e:
+        logger.error(f"Sheets error: {str(e)}")
+        return JSONResponse({
+            "status": "error",
+            "message": str(e)
+        }, status_code=500)
 
 @app.post("/upload-pdf")
 async def upload_pdf(file: UploadFile = File(...)):
@@ -152,7 +182,7 @@ async def upload_pdf(file: UploadFile = File(...)):
             return {"message": f"Successfully processed {file.filename}"}
         else:
             raise HTTPException(status_code=500, detail="Failed to process PDF")
-            
+
     except Exception as e:
         logger.error(f"PDF upload error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))

@@ -64,30 +64,34 @@ class LLMHandler:
                 system_message += """
 When formatting tables, follow these rules:
 1. Use proper Markdown table syntax with headers and alignment
-2. Include a clear title for the table
-3. Ensure all columns are properly aligned
+2. Include a clear title for the table using ### or #### heading
+3. Ensure all columns are properly aligned using :---: for center, :--- for left, ---: for right
 4. Use consistent formatting for similar data
 5. Add brief explanations if needed
 6. Format the table like this:
 
+### Table Title
 | Header 1 | Header 2 | Header 3 |
-|----------|----------|----------|
+|:--------:|:---------|---------:|
 | Data 1   | Data 2   | Data 3   |
 | Data 4   | Data 5   | Data 6   |
 
 For document comparisons, use this format:
 
+### Document Comparison
 📄 Document 1 Name
 | Aspect | Details |
-|--------|---------|
+|:-------|:--------|
 | Point 1 | Info 1  |
 | Point 2 | Info 2  |
 
 📄 Document 2 Name
 | Aspect | Details |
-|--------|---------|
+|:-------|:--------|
 | Point 1 | Info 1  |
 | Point 2 | Info 2  |
+
+Always ensure tables are properly aligned and formatted for readability.
 """
 
             # Single response
