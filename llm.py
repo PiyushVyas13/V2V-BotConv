@@ -32,7 +32,6 @@ class LLMHandler:
     def generate_response(self, 
                          query: str, 
                          context: List[Dict], 
-                         dual_response: bool = False,
                          conversation_history: Optional[str] = None) -> Dict:
         """
         Generate a response using the LLM.
@@ -40,7 +39,6 @@ class LLMHandler:
         Args:
             query: User query
             context: Retrieved context from RAG system
-            dual_response: Whether to generate dual responses
             conversation_history: Optional conversation history string
             
         Returns:
@@ -57,46 +55,52 @@ class LLMHandler:
                 system_message += f"\n\n{conversation_history}"
             if context_text:
                 system_message += f"\n\nRelevant context:\n{context_text}"
-            
-            if dual_response:
-                # Generate dual responses
-                system_message += "\n\nPlease provide two different responses:\n1. A concise response\n2. A more detailed, structured response"
-                
-                response = self.client.chat.completions.create(
-                    model=self.model_name,
-                    messages=[
-                        {"role": "system", "content": system_message},
-                        {"role": "user", "content": query}
-                    ],
-                    temperature=0.7,
-                    max_tokens=1000
-                )
-                
-                response_text = response.choices[0].message.content.strip()
-                responses = []
-                
-                if "Concise Response:" in response_text and "Structured Response:" in response_text:
-                    parts = response_text.split("Structured Response:")
-                    responses.append(parts[0].replace("Concise Response:", "").strip())
-                    responses.append(parts[1].strip())
-                else:
-                    responses = response_text.split("\n\n", 1)
-                    if len(responses) < 2:
-                        responses.append("I apologize, I couldn't generate a second response.")
-                
-                return {"responses": responses, "audio": None}
-            else:
-                # Single response
-                response = self.client.chat.completions.create(
-                    model=self.model_name,
-                    messages=[
-                        {"role": "system", "content": system_message},
-                        {"role": "user", "content": query}
-                    ],
-                    temperature=0.7,
-                    max_tokens=1000
-                )
-                return {"responses": [response.choices[0].message.content.strip()], "audio": None}
+
+            # Check if the query is asking for a comparison or table format
+            query_lower = query.lower()
+            is_comparison = any(keyword in query_lower for keyword in ["compare", "differences", "versus", "vs", "table", "format as table"])
+
+            if is_comparison:
+                system_message += """
+When formatting tables, follow these rules:
+1. Use proper Markdown table syntax with headers and alignment
+2. Include a clear title for the table
+3. Ensure all columns are properly aligned
+4. Use consistent formatting for similar data
+5. Add brief explanations if needed
+6. Format the table like this:
+
+| Header 1 | Header 2 | Header 3 |
+|----------|----------|----------|
+| Data 1   | Data 2   | Data 3   |
+| Data 4   | Data 5   | Data 6   |
+
+For document comparisons, use this format:
+
+📄 Document 1 Name
+| Aspect | Details |
+|--------|---------|
+| Point 1 | Info 1  |
+| Point 2 | Info 2  |
+
+📄 Document 2 Name
+| Aspect | Details |
+|--------|---------|
+| Point 1 | Info 1  |
+| Point 2 | Info 2  |
+"""
+
+            # Single response
+            response = self.client.chat.completions.create(
+                model=self.model_name,
+                messages=[
+                    {"role": "system", "content": system_message},
+                    {"role": "user", "content": query}
+                ],
+                temperature=0.7,
+                max_tokens=1000
+            )
+            return {"responses": [response.choices[0].message.content.strip()], "audio": None}
         except Exception as e:
             logger.error(f"Error generating response: {str(e)}")
             return {"responses": ["I apologize, but I encountered an error while generating the response. Please try again."], "audio": None}

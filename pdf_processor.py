@@ -169,14 +169,38 @@ class PDFProcessor:
     def _get_embeddings_batch(self, texts: List[str], batch_size: int = 32) -> np.ndarray:
         """Get embeddings for a batch of texts."""
         all_embeddings = []
-        for i in tqdm(range(0, len(texts), batch_size), desc="Generating embeddings"):
-            batch = texts[i:i + batch_size]
-            response = self.client.embeddings.create(
-                input=batch,
-                model="text-embedding-ada-002"
-            )
-            batch_embeddings = [data.embedding for data in response.data]
-            all_embeddings.extend(batch_embeddings)
+        
+        # Filter out empty or invalid texts
+        valid_texts = [text.strip() for text in texts if text and isinstance(text, str) and text.strip()]
+        
+        if not valid_texts:
+            logger.error("No valid texts found for embedding generation")
+            return np.array([])
+            
+        for i in tqdm(range(0, len(valid_texts), batch_size), desc="Generating embeddings"):
+            batch = valid_texts[i:i + batch_size]
+            try:
+                response = self.client.embeddings.create(
+                    input=batch,
+                    model="text-embedding-ada-002"
+                )
+                batch_embeddings = [data.embedding for data in response.data]
+                all_embeddings.extend(batch_embeddings)
+            except Exception as e:
+                logger.error(f"Error generating embeddings for batch: {str(e)}")
+                # If batch processing fails, try processing one by one
+                for text in batch:
+                    try:
+                        response = self.client.embeddings.create(
+                            input=text,
+                            model="text-embedding-ada-002"
+                        )
+                        all_embeddings.append(response.data[0].embedding)
+                    except Exception as e:
+                        logger.error(f"Error generating embedding for text: {str(e)}")
+                        # Add a zero vector as placeholder for failed embeddings
+                        all_embeddings.append(np.zeros(self.dimension))
+        
         return np.array(all_embeddings)
     
     def process_pdf(self, pdf_path: str) -> List[Dict]:

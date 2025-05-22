@@ -157,67 +157,6 @@
             justify-content: flex-start;
         }
 
-        .dual-response-container {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            background: #1e1e1e;
-            padding: 10px;
-            border-radius: 12px;
-            margin: 6px 0;
-        }
-
-        .dual-response-header {
-            text-align: center;
-            font-size: clamp(13px, 2vw, 15px);
-            color: #e5e7eb;
-            margin-bottom: 10px;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-        }
-
-        .dual-response-wrapper {
-            display: flex;
-            flex-direction: row;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .dual-response {
-            flex: 1;
-            background: #4A4A4A;
-            color: #e5e7eb;
-            padding: clamp(14px, 2.5vw, 18px);
-            border-radius: 16px;
-            position: relative;
-            min-width: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 120px;
-            letter-spacing: -0.01em;
-            box-shadow: 0 2px 8px rgba(74, 74, 74, 0.2);
-        }
-
-        .dual-response .message-text {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding-bottom: 6px;
-        }
-
-        .dual-response .prefer-button {
-            margin-top: auto;
-        }
-
-        .dual-response.selected {
-            border: 2px solid #F15A29;
-            border-radius: 12px;
-        }
-
-        .dual-response:hover {
-            background: #4A4A4A;
-            box-shadow: 0 0 12px rgba(255, 107, 53, 0.9), 0 2px 6px rgba(255, 107, 53, 0.4);
-        }
-
         .message-bubble {
             max-width: 80%;
             padding: clamp(12px, 2vw, 16px) clamp(14px, 2.5vw, 20px);
@@ -226,6 +165,76 @@
             font-size: clamp(14px, 1.8vw, 16px);
             position: relative;
             letter-spacing: -0.01em;
+        }
+
+        /* Table styles */
+        .message-bubble table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+        }
+
+        .message-bubble th {
+            background: rgba(255, 107, 53, 0.2);
+            color: #FF6B35;
+            font-weight: 600;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            white-space: normal;
+        }
+
+        .message-bubble td {
+            padding: 10px 12px;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            white-space: normal;
+            vertical-align: top;
+            color: #e5e7eb;
+        }
+
+        .message-bubble tbody tr:nth-child(even) {
+            background: rgba(255, 107, 53, 0.05);
+        }
+
+        .message-bubble tr:last-child td {
+            border-bottom: 1px solid rgba(255, 107, 53, 0.3);
+        }
+
+        .message-bubble tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Document header styles */
+        .message-bubble h3 {
+            color: #FF6B35;
+            font-weight: 600;
+            margin: 20px 0 10px 0;
+            font-size: 1.1em;
+        }
+
+        /* Add styles for code blocks and inline code */
+        .message-bubble pre {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .message-bubble code {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .message-bubble pre code {
+            background: none;
+            padding: 0;
         }
 
         .user-message .message-bubble {
@@ -315,33 +324,6 @@
             animation-delay: 0.4s;
         }
 
-        .prefer-button {
-            background: #FF6B35;
-            color: #fff;
-            padding: 10px 16px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: clamp(13px, 1.8vw, 15px);
-            font-weight: 500;
-            transition: all 0.3s ease;
-            letter-spacing: -0.01em;
-            touch-action: manipulation;
-            width: auto;
-            height: auto;
-            box-shadow: 0 2px 8px rgba(255, 107, 53, 0.2);
-        }
-
-        .prefer-button:hover {
-            background: #FF8B5E;
-            box-shadow: 0 0 12px rgba(255, 107, 53, 0.9), 0 2px 6px rgba(255, 107, 53, 0.4);
-        }
-
-        .prefer-button:disabled {
-            background: #4A4A4A;
-            cursor: not-allowed;
-        }
-
         .input-container {
             background: #1e1e1e;
             padding: clamp(12px, 2vw, 16px);
@@ -413,6 +395,10 @@
             box-shadow: 0 0 50px rgba(255, 107, 53, 2.5), 0 0 25px rgba(255, 107, 53, 1.8);
         }
 
+        .send-button.processing {
+            background: #4A4A4A;
+        }
+
         .mic-button.recording {
             background: #FF8B5E;
             animation: glow 0.8s infinite alternate ease-in-out;
@@ -478,12 +464,8 @@
                 border-radius: 8px;
             }
 
-            .message-bubble, .dual-response {
+            .message-bubble {
                 max-width: 85%;
-            }
-
-            .dual-response-wrapper {
-                flex-direction: column;
             }
 
             .input-container {
@@ -546,14 +528,10 @@
                 gap: 6px;
             }
 
-            .message-bubble, .dual-response {
+            .message-bubble {
                 max-width: 90%;
                 font-size: 13px;
                 padding: 8px 12px;
-            }
-
-            .dual-response {
-                min-height: 100px;
             }
 
             .timestamp {
@@ -564,11 +542,6 @@
                 width: 20px;
                 height: 20px;
                 margin: 0 4px;
-            }
-
-            .prefer-button {
-                padding: 6px 12px;
-                font-size: 12px;
             }
 
             .input-textarea {
@@ -598,12 +571,8 @@
                 font-size: 20px;
             }
 
-            .message-bubble, .dual-response {
+            .message-bubble {
                 font-size: 16px;
-            }
-            
-            .dual-response .message-text { /* Increase font size specifically for dual response text */
-                font-size: clamp(15px, 2vw, 17px); /* Slightly larger font */
             }
 
             .input-textarea {
@@ -611,28 +580,42 @@
             }
         }
 
-        .dual-response-divider {
-            border-top: 1px solid rgba(255, 107, 53, 0.2); /* Subtle orange divider */
-            margin: 10px 0; /* Adjust spacing */
-            transition: border-color 0.3s ease;
+        .sheets-button {
+            background: #4A4A4A;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: clamp(14px, 1.8vw, 16px);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: -0.01em;
+            touch-action: manipulation;
+            width: 48px;
+            height: 48px;
+            margin-left: 8px;
+            box-shadow: 0 2px 8px rgba(74, 74, 74, 0.2);
         }
 
-        .dual-response-wrapper:hover .dual-response-divider,
-        .dual-response:hover + .dual-response-divider,
-        .dual-response:hover ~ .dual-response-divider:not(.dual-response:hover ~ .dual-response-wrapper > .dual-response-divider) { /* More complex selector to highlight the divider on hover of either response block */
-            border-color: rgba(255, 107, 53, 0.8); /* More visible on hover */
+        .sheets-button:hover {
+            background: #FF6B35;
+            box-shadow: 0 0 12px rgba(255, 107, 53, 0.9), 0 2px 6px rgba(255, 107, 53, 0.4);
         }
 
-        .dual-response-description {
-            font-size: clamp(13px, 1.8vw, 15px);
+        .sheets-button.active {
+            background: #FF6B35;
+        }
+
+        /* Add styles for document headers */
+        .document-header {
+            color: #FF6B35;
             font-weight: 600;
-            color: #F15A29; /* Orange color */
-            margin-bottom: 8px;
-        }
-        
-        .dual-response:hover .dual-response-description { /* Add glow/color change on hover */
-            color: #FF8B5E; /* Lighter orange on hover */
-            text-shadow: 0 0 8px rgba(255, 107, 53, 0.5); /* Subtle text shadow glow */
+            margin: 20px 0 10px 0;
+            font-size: 1.1em;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -661,11 +644,13 @@
             <img src="/static/images/logo2.png" alt="PG Glass Logo" class="logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/50x50?text=Logo+Error';">
             <h1>PG Glass Chatbot</h1>
             <div class="toggle-container">
-                <span class="toggle-label">Dual Response</span>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="dual-response-toggle" onchange="toggleDualResponse()">
-                    <span class="slider"></span>
-                </label>
+                <button class="sheets-button" id="sheets-button" onclick="toggleSheetsMode()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M3 9H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 21V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
             </div>
         </div>
 
@@ -677,10 +662,14 @@
         <!-- Input Bar Component -->
         <div class="input-container">
             <textarea class="input-textarea" id="user-input" placeholder="Type your message..."></textarea>
-            <button class="send-button" onclick="enqueueMessage()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <button class="send-button" id="send-button" onclick="enqueueMessage()">
+                <svg id="send-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <svg id="stop-icon" style="display: none;" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="#e5e7eb" stroke-width="2"/>
+                    <rect x="9" y="9" width="6" height="6" fill="#252526"/>
                 </svg>
             </button>
             <button class="mic-button" id="mic-button" onclick="toggleSpeechRecognition()">
@@ -703,19 +692,11 @@
 
         <!-- Footer Component -->
         <div class="footer">
-            Powered by <a href="https://elevenlabs.io/">ElevenLabs</a> and <a href="https://openai.com/">OpenAI</a>
+            Powered by <a href="https://darkslategray-weasel-292671.hostingersite.com/">AI LifeBot</a>
         </div>
     </div>
 
     <script>
-        // Simple UUID generator for dual response IDs
-        function generateUUID() {
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-                return v.toString(16);
-            });
-        }
-
         // Initialize Web Speech API
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) {
@@ -735,6 +716,7 @@
         let sourceNode = null;
         let isMuted = JSON.parse(localStorage.getItem('isMuted')) || false;
         let isStreaming = false;
+        let currentAudio = null; // Track the current audio object
 
         // Initialize mute button state
         const muteButton = document.getElementById('mute-button');
@@ -766,6 +748,10 @@
                 sourceNode.disconnect();
                 sourceNode = null;
             }
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+            }
             isStreaming = false;
             if (audioContext.state === 'running') {
                 audioContext.suspend();
@@ -790,61 +776,25 @@
             }
         }
 
-        // Stream audio from the server
-        async function streamAudio(text, history) {
-            try {
-                const response = await fetch("/stream_audio", {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        text,
-                        history,
-                        is_speech: true,
-                        dual_response: false
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
-                }
-
-                const blob = await response.blob();
-                playAudio(blob);
-            } catch (error) {
-                console.error('Audio streaming error:', error);
-                displayError(`Error streaming audio: ${error.message}`);
-            }
-        }
-
-        // Load dual response toggle state from local storage
-        let dualResponseEnabled = JSON.parse(localStorage.getItem('dualResponseEnabled')) || false;
-        document.getElementById('dual-response-toggle').checked = dualResponseEnabled;
-
-        // Toggle dual response mode
-        function toggleDualResponse() {
-            dualResponseEnabled = document.getElementById('dual-response-toggle').checked;
-            localStorage.setItem('dualResponseEnabled', JSON.stringify(dualResponseEnabled));
-        }
-
         // Load and sanitize chat history from local storage
-        let chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
+        let chatHistory = [];
+        
+        // Check if this is a fresh server load by checking a server timestamp
+        fetch("/server_timestamp")
+            .then(response => response.json())
+            .then(data => {
+                const lastServerTimestamp = localStorage.getItem('lastServerTimestamp');
+                if (lastServerTimestamp !== data.timestamp) {
+                    // Server has been reloaded, clear history
+                    localStorage.removeItem('chatHistory');
+                    localStorage.setItem('lastServerTimestamp', data.timestamp);
+                } else {
+                    // Server hasn't been reloaded, load existing history
+                    chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
         chatHistory = chatHistory.filter(msg => {
             if (!msg.role || !msg.text) return false;
-            if (msg.type === 'dual') {
-                const selected = msg.responses.find(r => r.selected) || msg.responses[0];
-                return selected && selected.text;
-            }
             return true;
         }).map(msg => {
-            if (msg.type === 'dual') {
-                const selected = msg.responses.find(r => r.selected) || msg.responses[0];
-                return {
-                    role: 'assistant',
-                    text: selected.text,
-                    timestamp: msg.timestamp || new Date().toISOString(),
-                    isSpeech: msg.isSpeech || false
-                };
-            }
             return {
                 role: msg.role || 'user',
                 text: msg.text,
@@ -853,76 +803,90 @@
             };
         });
         localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+                }
+                // Render initial chat history
+                chatHistory.forEach(renderMessage);
+            })
+            .catch(error => {
+                console.error('Error checking server timestamp:', error);
+                // If there's an error, load existing history
+                chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
+                chatHistory = chatHistory.filter(msg => {
+                    if (!msg.role || !msg.text) return false;
+                    return true;
+                }).map(msg => {
+                    return {
+                        role: msg.role || 'user',
+                        text: msg.text,
+                        timestamp: msg.timestamp || new Date().toISOString(),
+                        isSpeech: msg.isSpeech || false
+                    };
+                });
+                localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+                // Render initial chat history
+                chatHistory.forEach(renderMessage);
+            });
 
         const chatContainer = document.getElementById('chat-container');
 
         // Query queue to manage sequential processing
         let queryQueue = [];
         let isProcessingQueue = false;
-
-        // Render initial chat history
-        chatHistory.forEach(renderMessage);
+        let isTyping = false; // Track typing state
+        let typingTimeout = null; // Store typing timeout
 
         // Auto-scroll to bottom
         function scrollToBottom() {
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        // Render a message without typing animation
-        function renderMessage(message) {
-            if (message.type === 'dual') {
-                renderDualResponse(message);
-            } else {
-                const div = document.createElement('div');
-                div.className = `message ${message.role === 'assistant' ? 'bot' : message.role}-message`;
-                div.innerHTML = `
-                    ${message.role === 'assistant' ? '<img src="https://ui-avatars.com/api/?name=Bot&background=5A5A5A&color=e5e7eb&size=40" class="avatar bot-avatar" alt="Bot Avatar">' : ''}
-                    <div class="message-bubble">
-                        ${marked.parse(message.text)}
-                        <div class="timestamp">${new Date(message.timestamp).toLocaleTimeString()}</div>
-                    </div>
-                    ${message.role === 'user' ? '<img src="https://ui-avatars.com/api/?name=User&background=FF6200&color=fff&size=40" class="avatar" alt="User Avatar">' : ''}
-                `;
-                chatContainer.appendChild(div);
-                scrollToBottom();
-                // Typeset LaTeX in the new message
-                MathJax.typesetPromise([div]).catch((err) => console.error('MathJax typesetting failed:', err));
-            }
-        }
+        // Configure marked options
+        marked.setOptions({
+            breaks: true,
+            gfm: true,
+            headerIds: false,
+            mangle: false,
+            sanitize: false,
+            smartLists: true,
+            smartypants: true,
+            xhtml: false,
+            tables: true
+        });
 
-        // Render a dual response with selection option
-        function renderDualResponse(message) {
+        // Custom renderer for tables
+        const renderer = new marked.Renderer();
+        renderer.table = (header, body) => {
+            return `<table class="markdown-table">
+                <thead>${header}</thead>
+                <tbody>${body}</tbody>
+            </table>`;
+        };
+        marked.setOptions({ renderer: renderer });
+
+        // Render a message without typing animation (for user messages and history)
+        function renderMessage(message) {
             const div = document.createElement('div');
-            div.className = 'dual-response-container';
-            div.id = `dual-${message.id}`;
-            const selectedResponse = message.responses.find(r => r.selected) || message.responses[0];
+            div.className = `message ${message.role === 'assistant' ? 'bot' : message.role}-message`;
+            
+            // Parse the message text with marked
+            const parsedContent = marked.parse(message.text, { async: false });
+            
             div.innerHTML = `
-                <img src="https://ui-avatars.com/api/?name=Bot&background=5A5A5A&color=e5e7eb&size=40" class="avatar bot-avatar" alt="Bot Avatar">
+                ${message.role === 'assistant' ? '<img src="https://ui-avatars.com/api/?name=Bot&background=5A5A5A&color=e5e7eb&size=40" class="avatar bot-avatar" alt="Bot Avatar">' : ''}
                 <div class="message-bubble">
-                    ${selectedResponse.text}
+                    ${parsedContent}
                     <div class="timestamp">${new Date(message.timestamp).toLocaleTimeString()}</div>
                 </div>
+                ${message.role === 'user' ? '<img src="https://ui-avatars.com/api/?name=User&background=FF6200&color=fff&size=40" class="avatar" alt="User Avatar">' : ''}
             `;
             chatContainer.appendChild(div);
             scrollToBottom();
-            // Typeset LaTeX in the new dual response container
+            // Typeset LaTeX in the new message
             MathJax.typesetPromise([div]).catch((err) => console.error('MathJax typesetting failed:', err));
-
-            responses.forEach((response, index) => {
-                const messageTextElement = document.querySelector(`#response-${messageId}-${index} .message-text`);
-                // Extract description and clean text safely
-                const match = response.match(/^\d+\.\s*[^:]*:\s*(.*)/);
-                const cleanText = match ? match[1].trim() : response.trim();
-                
-                // Parse markdown and set innerHTML directly (no typing animation for dual responses)
-                messageTextElement.innerHTML = marked.parse(cleanText);
-                // Typeset LaTeX within this specific response bubble after setting content
-                MathJax.typesetPromise([messageTextElement]).catch((err) => console.error('MathJax typesetting failed for dual response bubble:', err));
-            });
         }
 
-        // Render a message with typing animation
-        function typeMessage(message, callback) {
+        // Render a message with typing animation and optional simultaneous audio
+        async function typeMessage(message, audioText, sanitizedHistory, callback) {
             const div = document.createElement('div');
             div.className = `message bot-message`;
             div.innerHTML = `
@@ -938,123 +902,53 @@
             const messageTextElement = div.querySelector('.message-text');
             const text = message.text;
             let index = 0;
+            isTyping = true;
+
+            // Show loading animation if this is a voice response
+            if (lastInputWasSpeech && !isMuted) {
+                const loader = displayLoader();
+                try {
+                    await streamAudio(audioText, sanitizedHistory);
+                    removeElement(loader);
+                } catch (error) {
+                    removeElement(loader);
+                    displayError('Error generating voice response: ' + error.message);
+                }
+            }
 
             function type() {
+                if (!isTyping) {
+                    if (div && div.parentNode) {
+                        messageTextElement.innerHTML = marked.parse(messageTextElement.textContent);
+                        MathJax.typesetPromise([div]).catch((err) => console.error('MathJax typesetting failed:', err));
+                    }
+                    return;
+                }
+
                 if (index < text.length) {
                     messageTextElement.textContent += text.charAt(index);
                     index++;
                     scrollToBottom();
-                    setTimeout(type, 30);
-                } else if (callback) {
-                    // Typeset LaTeX after typing animation is complete
+                    typingTimeout = setTimeout(type, 5);
+                } else {
+                    isTyping = false;
+                    clearTimeout(typingTimeout);
+                    messageTextElement.innerHTML = marked.parse(message.text);
                     MathJax.typesetPromise([div]).catch((err) => console.error('MathJax typesetting failed:', err));
-                    callback();
+                    if (callback) callback();
                 }
             }
 
             type();
         }
 
-        // Stream dual responses with typing animation
-        function streamDualResponses(responses, messageId, isSpeech) {
-            const div = document.createElement('div');
-            div.className = 'dual-response-container';
-            div.id = `dual-${messageId}`;
-            div.innerHTML = `
-                <div class="dual-response-header">Which response do you prefer?</div>
-                <div class="dual-response-wrapper">
-                    ${responses.map((response, index) => {
-                        // Extract description and clean text
-                        const match = response.match(/^(\d+\.\s*[^:]*):\\s*(.*)/);
-                        let description = match ? match[1].trim() : `Response ${index + 1}`;
-                        const cleanText = match ? match[2].trim() : response.trim();
-                        
-                        // Clean up description: remove leading number, dot, space, and trailing colon/space
-                        description = description.replace(/^\\d+\\.\\s*/, '').replace(/\\s*:$/, '');
-
-                        const isSecondResponse = index === 1;
-                        const dividerHtml = isSecondResponse ? '<div class="dual-response-divider"></div>' : '';
-                        return `
-                            ${dividerHtml}
-                        <div class="dual-response" id="response-${messageId}-${index}">
-                                <div class="dual-response-description">${description}</div>
-                            <span class="message-text"></span>
-                                <button class="prefer-button" onclick="selectResponse('${messageId}', ${index}, ${isSpeech})">Prefer this response</button>
-                        </div>
-                        `;
-                    }).join('')}
-                </div>
-            `;
-            chatContainer.appendChild(div);
-            scrollToBottom();
-
-            responses.forEach((response, index) => {
-                const messageTextElement = document.querySelector(`#response-${messageId}-${index} .message-text`);
-                // Extract description and clean text safely
-                const match = response.match(/^\d+\.\s*[^:]*:\s*(.*)/);
-                const cleanText = match ? match[1].trim() : response.trim();
-                
-                // Parse markdown and set innerHTML directly (no typing animation for dual responses)
-                messageTextElement.innerHTML = marked.parse(cleanText);
-                // Typeset LaTeX within this specific response bubble after setting content
-                MathJax.typesetPromise([messageTextElement]).catch((err) => console.error('MathJax typesetting failed for dual response bubble:', err));
-            });
-        }
-
-        // Function to handle dual response selection
-        function selectResponse(messageId, selectedIndex, isSpeech) {
-            const container = document.getElementById(`dual-${messageId}`);
-            const message = chatHistory.find(msg => msg.id === messageId);
-            const responses = message.responses;
-
-            // Extract and clean the selected response text
-            const selectedRawText = responses[selectedIndex];
-            const match = selectedRawText.match(/^\d+\.\s*[^:]*:\s*(.*)/);
-            const selectedText = match ? match[1].trim() : selectedRawText.trim();
-            
-            // Mark as selected in the original structure (if needed for other logic)
-            responses.forEach((r, i) => {
-                if (i === selectedIndex) {
-                    // Re-add the cleaned text to the object for history storage
-                    message.responses[i] = selectedText; // Store cleaned text
-                    message.responses[i].selected = true;
-                } else {
-                    message.responses[i].selected = false;
-                }
-            });
-
-            // Update chatHistory with the selected response as a single message
-            // Find the newly updated selected response in the history message object
-            const selectedResponseInHistory = message.responses.find(r => r.selected);
-
-            const updatedMessage = {
-                role: 'assistant',
-                text: selectedText, // Use the cleaned text for the final message display
-                timestamp: message.timestamp,
-                isSpeech: isSpeech
-            };
-            const messageIndex = chatHistory.findIndex(msg => msg.id === messageId);
-            chatHistory[messageIndex] = updatedMessage; // Replace the dual message with the single selected message
-            localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
-
-            container.className = 'message bot-message';
-            container.innerHTML = `
-                <img src="https://ui-avatars.com/api/?name=Bot&background=5A5A5A&color=e5e7eb&size=40" class="avatar bot-avatar" alt="Bot Avatar">
-                <div class="message-bubble">
-                    ${marked.parse(selectedText)}
-                    <div class="timestamp">${new Date(message.timestamp).toLocaleTimeString()}</div>
-                </div>
-            `;
-            scrollToBottom();
-            // Typeset LaTeX in the updated message container
-            MathJax.typesetPromise([container]).catch((err) => console.error('MathJax typesetting failed:', err));
-
-            isProcessingQueue = false;
-            processNextQuery();
-        }
-
         function displayError(message) {
             console.error(message);
+            const div = document.createElement('div');
+            div.className = 'error-message';
+            div.textContent = message;
+            chatContainer.appendChild(div);
+            scrollToBottom();
         }
 
         // Display loader
@@ -1085,22 +979,101 @@
             }
         }
 
-        // Enqueue a message to be processed
+        let sheetsModeEnabled = false;
+
+        function toggleSheetsMode() {
+            sheetsModeEnabled = !sheetsModeEnabled;
+            const sheetsButton = document.getElementById('sheets-button');
+            const inputTextarea = document.getElementById('user-input');
+            
+            sheetsButton.classList.toggle('active', sheetsModeEnabled);
+            inputTextarea.placeholder = sheetsModeEnabled ? 
+                "Type your message for Sheets..." : 
+                "Type your message...";
+        }
+
+        // Modify the enqueueMessage function to handle sheets mode and interrupt
         function enqueueMessage() {
             const input = document.getElementById('user-input');
             const text = input.value.trim();
+            const sendButton = document.getElementById('send-button');
+            const sendIcon = document.getElementById('send-icon');
+            const stopIcon = document.getElementById('stop-icon');
+
+            if (isProcessingQueue || isTyping) {
+                // Interrupt current processing and typing
+                isProcessingQueue = false;
+                isTyping = false;
+                clearTimeout(typingTimeout);
+                queryQueue = [];
+                stopAudioStream();
+                const loader = document.querySelector('.loader');
+                const typingIndicator = document.querySelector('.typing-indicator');
+                removeElement(loader);
+                removeElement(typingIndicator);
+                sendButton.classList.remove('processing');
+                sendIcon.style.display = 'block';
+                stopIcon.style.display = 'none';
+                return;
+            }
+
             if (!text) return;
 
-            queryQueue.push({ text, isSpeech: lastInputWasSpeech });
+            if (sheetsModeEnabled) {
+                // Handle sheets mode
+                fetch("/sheets", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        text,
+                        history: chatHistory.slice(-5)
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        // Add success message to chat
+                        const successMessage = {
+                            role: 'assistant',
+                            text: `Successfully updated Google Sheets with: ${text}`,
+                            timestamp: new Date().toISOString()
+                        };
+                        chatHistory.push(successMessage);
+                        localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+                        renderMessage(successMessage);
+                    } else {
+                        throw new Error(data.message || 'Failed to update sheets');
+                    }
+                })
+                .catch(error => {
+                    displayError(`Error updating sheets: ${error.message}`);
+                });
+            } else {
+                // Handle normal chat mode
+                queryQueue.push({ text, isSpeech: lastInputWasSpeech });
+                // Reset lastInputWasSpeech to false if the input was typed
+                if (!lastInputWasSpeech) {
+                    lastInputWasSpeech = false;
+                }
+                processNextQuery(); // Start processing immediately
+            }
+
             input.value = ''; // Clear input immediately
-            processNextQuery();
         }
 
         // Function to process the next query in the queue
         async function processNextQuery() {
             if (isProcessingQueue || queryQueue.length === 0) return;
             
+            const sendButton = document.getElementById('send-button');
+            const sendIcon = document.getElementById('send-icon');
+            const stopIcon = document.getElementById('stop-icon');
+
             isProcessingQueue = true;
+            sendButton.classList.add('processing');
+            sendIcon.style.display = 'none';
+            stopIcon.style.display = 'block';
+
             const { text, isSpeech } = queryQueue.shift();
             
             // Add user message to history and display immediately
@@ -1132,9 +1105,8 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         text, 
-                        history: sanitizedHistory, 
-                        is_speech: isSpeech,
-                        dual_response: dualResponseEnabled
+                        history: sanitizedHistory,
+                        is_speech: isSpeech // Use the isSpeech from the queue item
                     })
                 });
 
@@ -1157,48 +1129,34 @@
                 const data = await response.json();
                 if (data.error) throw new Error(data.error);
 
-                if (dualResponseEnabled && data.responses.length > 1) {
-                    // Handle dual responses
-                    const messageId = generateUUID();
-                    const botMessage = {
-                        role: 'assistant',
-                        type: 'dual',
-                        id: messageId,
-                        responses: data.responses,
-                        timestamp: new Date().toISOString(),
-                        isSpeech
-                    };
-                    chatHistory.push(botMessage);
-                    localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
-                    streamDualResponses(data.responses, messageId, isSpeech);
-                } else {
-                    // Handle single response with typing animation
-                    const botMessage = { 
-                        role: 'assistant', 
-                        text: data.responses[0],
-                        timestamp: new Date().toISOString(),
-                        isSpeech
-                    };
-                    chatHistory.push(botMessage);
-                    localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
-                    
-                    // Use typeMessage for streaming effect
-                    typeMessage(botMessage, () => {
-                        // Stream audio after typing is complete if speech is enabled
-                        if (isSpeech && !isMuted) {
-                            streamAudio(data.responses[0], sanitizedHistory);
-                        }
-                        isProcessingQueue = false;
-                        processNextQuery();
-                    });
-                }
+                // Handle single response with typing animation and optional audio
+                const botMessage = { 
+                    role: 'assistant', 
+                    text: data.responses[0],
+                    timestamp: new Date().toISOString(),
+                    isSpeech: isSpeech // Use the isSpeech from the queue item
+                };
+                chatHistory.push(botMessage);
+                localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+                
+                // Use typeMessage for streaming effect and optional simultaneous audio
+                await typeMessage(botMessage, data.responses[0], sanitizedHistory, () => {
+                    isProcessingQueue = false;
+                    sendButton.classList.remove('processing');
+                    sendIcon.style.display = 'block';
+                    stopIcon.style.display = 'none';
+                    processNextQuery(); // Process next query in queue
+                });
             } catch (error) {
                 console.error('Fetch error details:', error);
                 removeElement(loader);
                 removeElement(document.querySelector('.typing-indicator'));
                 displayError(`Error: ${error.message}. Ensure the backend is running on http://localhost:8001.`);
                 isProcessingQueue = false;
-                processNextQuery();
+                sendButton.classList.remove('processing');
+                sendIcon.style.display = 'block';
+                stopIcon.style.display = 'none';
+                processNextQuery(); // Process next query in queue
             }
         }
 
@@ -1264,6 +1222,7 @@
         document.getElementById('user-input').addEventListener('keydown', (event) => {
             if (event.key === 'Enter' && !event.shiftKey) {
                 event.preventDefault();
+                lastInputWasSpeech = false; // Set to false when input is typed
                 enqueueMessage();
             }
         });

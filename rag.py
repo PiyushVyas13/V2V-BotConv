@@ -137,14 +137,13 @@ class RAGSystem:
             logger.error(f"Error querying RAG system: {str(e)}")
             return None
 
-    def generate_response(self, query: str, context: List[Dict], dual_response: bool = False) -> Dict:
+    def generate_response(self, query: str, context: List[Dict]) -> Dict:
         """
         Generate a response using the LLM handler.
         
         Args:
             query: User query
             context: Retrieved context from RAG system
-            dual_response: Whether to generate dual responses
             
         Returns:
             Dict: Response containing text and optional audio
@@ -157,7 +156,6 @@ class RAGSystem:
             response = self.llm_handler.generate_response(
                 query, 
                 context, 
-                dual_response=dual_response,
                 conversation_history=memory_context
             )
             

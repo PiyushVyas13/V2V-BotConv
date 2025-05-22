@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import JSONResponse, HTMLResponse
+from fastapi.responses import JSONResponse, HTMLResponse, StreamingResponse
 from pydantic import BaseModel
 from llm import LLMHandler
 from pdf_processor import PDFProcessor
@@ -13,6 +13,8 @@ from pathlib import Path
 import logging
 import uvicorn
 import json
+from gtts import gTTS  # Import gTTS for text-to-speech
+import io  # For handling in-memory bytes
 
 # Set up logging with more detailed format
 logging.basicConfig(
@@ -90,7 +92,6 @@ class ChatRequest(BaseModel):
     text: str
     history: Optional[List[Message]] = []
     is_speech: Optional[bool] = False
-    dual_response: Optional[bool] = False
 
 class ChatResponse(BaseModel):
     responses: List[str]
@@ -103,7 +104,7 @@ async def get_index(request: Request):
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     try:
-        logger.info(f"Received chat request: {request.text}, dual_response: {request.dual_response}")
+        logger.info(f"Received chat request: {request.text}")
         
         # Check if we have any processed documents
         if not rag_system.documents_processed:
@@ -122,8 +123,7 @@ async def chat(request: ChatRequest):
         # Generate response using RAG system
         response = rag_system.generate_response(
             request.text, 
-            context, 
-            dual_response=request.dual_response
+            context
         )
         
         logger.info("Successfully generated response")
@@ -156,6 +156,35 @@ async def upload_pdf(file: UploadFile = File(...)):
     except Exception as e:
         logger.error(f"PDF upload error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/stream_audio")
+async def stream_audio(request: ChatRequest):
+    try:
+        logger.info(f"Received audio stream request for text: {request.text}")
+
+        if not request.text:
+            raise HTTPException(status_code=400, detail="No text provided for audio streaming")
+
+        # Generate speech using gTTS
+        tts = gTTS(text=request.text, lang='en', slow=False)
+
+        # Save the audio to an in-memory buffer
+        audio_buffer = io.BytesIO()
+        tts.write_to_fp(audio_buffer)
+        audio_buffer.seek(0)
+
+        # Return the audio as a streaming response
+        return StreamingResponse(
+            audio_buffer,
+            media_type="audio/mp3",
+            headers={
+                "Content-Disposition": "inline; filename=audio.mp3"
+            }
+        )
+
+    except Exception as e:
+        logger.error(f"Audio streaming error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to generate audio: {str(e)}")
 
 def start():
     """Start the FastAPI server with uvicorn"""
