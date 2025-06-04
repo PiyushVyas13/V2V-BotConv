@@ -1,105 +1,85 @@
-# PGP-GPT Application
+# AI Chatbot with PDF Processing
 
-A web application that combines RAG (Retrieval-Augmented Generation) with voice interaction capabilities.
-
-## Project Structure
-
-```
-.
-├── frontend/
-│   ├── src/
-│   │   └── index.html
-│   ├── public/
-│   │   └── static/
-│   └── package.json
-├── backend/
-│   ├── api/
-│   │   └── main.py
-│   ├── core/
-│   │   ├── llm.py
-│   │   ├── rag.py
-│   │   ├── stt.py
-│   │   └── tts.py
-│   ├── data/
-│   │   ├── raw_pdfs/
-│   │   └── embeddings/
-│   └── requirements.txt
-└── vercel.json
-```
-
-## Deployment Instructions
-
-### Prerequisites
-
-1. Install Vercel CLI:
-```bash
-npm install -g vercel
-```
-
-2. Install Python dependencies:
-```bash
-cd backend
-pip install -r requirements.txt
-```
-
-3. Install frontend dependencies:
-```bash
-cd frontend
-npm install
-```
-
-### Environment Variables
-
-Create a `.env` file in the backend directory with the following variables:
-```
-OPENAI_API_KEY=your_openai_api_key
-ELEVENLABS_API_KEY=your_elevenlabs_api_key
-```
-
-### Local Development
-
-1. Start the backend server:
-```bash
-cd backend
-uvicorn api.main:app --reload
-```
-
-2. Start the frontend development server:
-```bash
-cd frontend
-npm start
-```
-
-### Deploying to Vercel
-
-1. Login to Vercel:
-```bash
-vercel login
-```
-
-2. Deploy the project:
-```bash
-vercel
-```
-
-3. Set environment variables in Vercel dashboard:
-   - Go to your project settings
-   - Add the environment variables from your `.env` file
+This project implements an AI chatbot that can process and answer questions about PDF documents using RAG (Retrieval Augmented Generation). OPEN AI
 
 ## Features
 
-- PDF document processing and embedding
+- PDF document processing and embedding generation
 - RAG-based question answering
-- Voice interaction (Speech-to-Text and Text-to-Speech)
-- Real-time chat interface
-- Streaming audio responses
+- Voice input/output support
+- Automatic PDF processing pipeline
 
-## API Endpoints
+## Directory Structure
 
-- `POST /api/chat`: Chat endpoint for text-based interaction
-- `POST /api/stream_audio`: Endpoint for streaming audio responses
-- `POST /api/transcribe`: Endpoint for speech-to-text transcription
+```
+.
+├── DATA/
+│   ├── raw_pdfs/     # Place your PDFs here
+│   └── embeddings/   # Generated embeddings
+├── templates/        # Frontend templates
+├── main.py          # FastAPI application
+├── pdf_processor.py # PDF processing logic
+├── llm.py          # LLM integration
+├── tts.py          # Text-to-speech
+└── stt.py          # Speech-to-text
+```
+
+## Adding New PDFs
+
+1. Place your PDF files in the `DATA/raw_pdfs/` directory
+2. The system will automatically:
+   - Process new PDFs
+   - Generate embeddings
+   - Update the vector store
+   - Make the content available for querying
+
+## CI/CD Pipeline
+
+The project includes a GitHub Actions workflow that automatically:
+1. Detects new or modified PDFs
+2. Processes them to generate embeddings
+3. Updates the vector store
+4. Commits changes back to the repository
+
+### Manual Trigger
+
+You can manually trigger the PDF processing pipeline:
+1. Go to the "Actions" tab in your GitHub repository
+2. Select "PDF Processing Pipeline"
+3. Click "Run workflow"
+
+## Setup
+
+1. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. Set up environment variables in `.env`:
+   ```
+   OPENAI_API_KEY=your_openai_api_key
+   ELEVENLABS_API_KEY=your_elevenlabs_api_key
+   ```
+
+3. Run the server:
+   ```bash
+   uvicorn main:app --host 0.0.0.0 --port 8000
+   ```
+
+## Usage
+
+1. Access the web interface at `http://localhost:8000`
+2. Add PDFs to `DATA/raw_pdfs/`
+3. Ask questions about the PDF content
+4. Use voice input/output as needed
+
+## Contributing
+
+1. Fork the repository
+2. Add your PDFs to `DATA/raw_pdfs/`
+3. Create a pull request
+4. The CI/CD pipeline will automatically process your PDFs
 
 ## License
 
-MIT 
+MIT License 

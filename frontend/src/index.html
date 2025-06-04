@@ -748,7 +748,7 @@
             if (isMuted) return;
 
             try {
-                const response = await fetch("/api/stream_audio", {
+                const response = await fetch("/stream_audio", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
@@ -761,12 +761,8 @@
                     throw new Error(`HTTP error ${response.status}`);
                 }
 
-                const data = await response.json();
-                if (data.status === "success" && data.audio) {
-                    playAudio(data.audio);
-                } else {
-                    throw new Error('Invalid audio data received from server');
-                }
+                const audioBlob = await response.blob();
+                playAudio(audioBlob);
             } catch (error) {
                 console.error('Audio streaming error:', error);
                 throw error;
@@ -1170,13 +1166,13 @@
                 }));
 
                 // Call backend chat endpoint
-                const response = await fetch("/api/chat", {
+                const response = await fetch("/chat", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         text, 
                         history: sanitizedHistory,
-                        is_speech: isSpeech
+                        is_speech: isSpeech // Use the isSpeech from the queue item
                     })
                 });
 
@@ -1204,7 +1200,7 @@
                     role: 'assistant', 
                     text: data.responses[0],
                     timestamp: new Date().toISOString(),
-                    isSpeech: isSpeech
+                    isSpeech: isSpeech // Use the isSpeech from the queue item
                 };
                 chatHistory.push(botMessage);
                 localStorage.setItem('chatHistory', JSON.stringify(chatHistory));

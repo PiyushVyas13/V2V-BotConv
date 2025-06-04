@@ -16,12 +16,12 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
 
         body {
-            background: linear-gradient(135deg, #2c2c2c, #4A4A4A);
+            background: #f9f9f9;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            color: #e5e7eb;
+            color: #161616;
             padding: clamp(20px, 4vw, 40px);
             letter-spacing: -0.01em;
         }
@@ -30,18 +30,25 @@
             width: 100%;
             max-width: 900px;
             height: 90vh;
-            background: #252526;
+            border: 7px solid #d4d4d4;
+            background-color: #f9f9f9;
             border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 
+            10px 15px 15px rgba(128, 128, 128, 0.1),     /* outer shadow (gray) */
+            -10px -10px 10px rgba(255, 255, 255, 1),     /* outer highlight (white) */
+            inset 7px 7px 10px rgba(128, 128, 128, 0.1), /* inner shadow (gray) */
+            inset -7px -7px 10px rgba(255, 255, 255, 1); /* inner highlight (white) */
             display: flex;
             flex-direction: column;
             overflow: hidden;
             margin: 20px 0;
+            position: relative;
+            z-index: 9;
         }
 
         /* Header Component */
         .header {
-            background: #1e1e1e;
+            background: rgba(255, 131, 23, 0.56);
             padding: clamp(16px, 3vw, 24px);
             display: flex;
             align-items: center;
@@ -62,7 +69,7 @@
         .header h1 {
             font-size: clamp(18px, 2.5vw, 24px);
             font-weight: 600;
-            color: #e5e7eb;
+            color: #161616;
             letter-spacing: -0.02em;
         }
 
@@ -135,6 +142,35 @@
             gap: clamp(6px, 1.5vw, 10px);
         }
 
+        .welcome-message-area {
+            display: flex;
+            flex-direction: column; 
+            align-items: center; 
+            gap: 15px; 
+            max-width: 80%; 
+            margin: auto; 
+        }
+
+        .bot-icon {
+            width: 100px; 
+            height: auto;
+            display: block; 
+            margin-bottom: 10px; 
+        }
+
+        .welcome-text {
+            font-size: clamp(1.5rem, 4vw, 2rem); 
+            font-weight: bold;
+            color: #7f7f7c97; 
+            margin: 0; 
+        }
+
+        .question-text {
+            font-size: clamp(1.2rem, 3.5vw, 1.6rem); 
+            color: #7f7f7c97; 
+            margin: 0; 
+        }
+
         .chat-container::-webkit-scrollbar {
             width: 5px;
         }
@@ -166,6 +202,7 @@
             font-size: clamp(14px, 1.8vw, 16px);
             position: relative;
             letter-spacing: -0.01em;
+            color: #161616;
         }
 
         /* Table styles - exact copy from index2.html */
@@ -193,7 +230,7 @@
             border: 1px solid #FF6B35; /* Blue-like border from index2.html */
             white-space: normal; /* Ensure wrapping for long content */
             vertical-align: top; /* Align cell content to top */
-            color: #e5e7eb; /* Keep the message bubble text color */
+            color: #161616;
         }
 
         .message-bubble tr:nth-child(even) {
@@ -241,10 +278,11 @@
         }
 
         .bot-message .message-bubble {
-            background: #4A4A4A;
-            color: #e5e7eb;
+            background: #f9f9f9;
+            color: #161616;
             border-bottom-left-radius: 4px;
             box-shadow: 0 2px 8px rgba(74, 74, 74, 0.2);
+            border: 1px solid #d4d4d4;
         }
 
         .timestamp {
@@ -321,7 +359,8 @@
         }
 
         .input-container {
-            background: #1e1e1e;
+            align-self: center;
+            width: 95%;
             padding: clamp(12px, 2vw, 16px);
             border-top: 2px solid #FF6B35;
             display: flex;
@@ -331,15 +370,20 @@
             bottom: 0;
             z-index: 10;
             flex-wrap: wrap;
+            border-radius: 10px;
+            -webkit-backdrop-filter: blur(50px);
+            backdrop-filter: blur(50px);
+            border: solid 4px #fff;
+            background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2) 33%, #fff 97%);
         }
 
         .input-textarea {
             flex: 1;
-            background: #2d2d2d;
-            border: 1px solid #FF6B35;
-            border-radius: 16px;
+            background: transparent;
+            border: 1px solid #d4d4d4;
+            border-radius: 50px;
             padding: clamp(10px, 2vw, 14px) clamp(12px, 2.5vw, 18px);
-            color: #e5e7eb;
+            color: #161616;
             font-size: clamp(14px, 1.8vw, 16px);
             resize: none;
             height: 50px;
@@ -347,6 +391,9 @@
             transition: all 0.2s ease;
             letter-spacing: -0.01em;
             min-width: 200px;
+            box-shadow: 
+                inset 7px 7px 15px #cfcfcf,  /* gray */
+                inset -5px -5px 10px rgba(255, 255, 255, 1);  /* white */
         }
 
         .input-textarea:focus {
@@ -410,10 +457,8 @@
         }
 
         .footer {
-            background: #1e1e1e;
             text-align: center;
             padding: clamp(12px, 2vw, 16px);
-            border-top: 1px solid #3c3c3c;
             font-size: clamp(13px, 1.8vw, 15px);
             color: #a0aec0;
             letter-spacing: -0.01em;
@@ -663,7 +708,7 @@
     <div class="container">
         <!-- Header Component -->
         <div class="header">
-            <img src="/static/images/logo2.png" alt="PG Glass Logo" class="logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/50x50?text=Logo+Error';">
+            <img src="https://pgpfirstusa.com/wp-content/uploads/2022/08/PGP-Glass-Logo-C.png" alt="PG Glass Logo" class="logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/50x50?text=Logo+Error';">
             <h1>PGP-GPT</h1>
             <div class="toggle-container">
                 <button class="sheets-button" id="sheets-button" onclick="toggleSheetsMode()">
@@ -679,6 +724,11 @@
         <!-- Chat Area Component -->
         <div class="chat-container" id="chat-container">
             <!-- Messages will be appended here -->
+            <div class="welcome-message-area">
+                <!-- <img src="chat.png" alt="Bot Icon" class="bot-icon"> -->
+                <p class="welcome-text">Welcome!</p>
+                <p class="question-text">What can I help you with?</p>
+            </div>
         </div>
 
         <!-- Input Bar Component -->
@@ -722,17 +772,24 @@
     </div>
 
     <script>
-        // Initialize Web Speech API
+        // Initialize Web Speech API with better browser detection
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!SpeechRecognition) {
-            displayError('Speech recognition not supported. Use Chrome or Firefox.');
+        let recognition = null;
+        let isWebSpeechSupported = false;
+
+        try {
+            if (SpeechRecognition) {
+                recognition = new SpeechRecognition();
+                recognition.lang = 'en-IN'; // Switch to 'hi-IN' for Hindi
+                recognition.interimResults = false;
+                recognition.maxAlternatives = 1;
+                isWebSpeechSupported = true;
+            }
+        } catch (e) {
+            console.warn('Web Speech API not supported:', e);
+            isWebSpeechSupported = false;
         }
-        const recognition = SpeechRecognition ? new SpeechRecognition() : null;
-        if (recognition) {
-            recognition.lang = 'en-IN'; // Switch to 'hi-IN' for Hindi
-            recognition.interimResults = false;
-            recognition.maxAlternatives = 1;
-        }
+
         let isRecognizing = false;
         let lastInputWasSpeech = false;
 
@@ -741,14 +798,21 @@
         let sourceNode = null;
         let isMuted = JSON.parse(localStorage.getItem('isMuted')) || false;
         let isStreaming = false;
-        let currentAudio = null; // Track the current audio object
+        let currentAudio = null;
+
+        // MediaRecorder setup for server-side STT fallback
+        let mediaRecorder = null;
+        let audioChunks = [];
+
+        // Check for MediaRecorder support
+        const isMediaRecorderSupported = !!(navigator.mediaDevices && window.MediaRecorder);
 
         // Function to stream audio from the backend
         async function streamAudio(text, history) {
             if (isMuted) return;
 
             try {
-                const response = await fetch("/api/stream_audio", {
+                const response = await fetch("/stream_audio", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
@@ -817,14 +881,14 @@
             if (!isMuted) {
                 const muteButton = document.getElementById('mute-button');
                 muteButton.classList.add('glowing');
-                if (typeof audioData === 'string') {
-                    // Handle base64 audio data
+                
+                // Create and play the audio from base64 data
                     currentAudio = new Audio(`data:audio/mp3;base64,${audioData}`);
-                } else {
-                    // Handle streaming audio
-                    currentAudio = new Audio(URL.createObjectURL(audioData));
-                }
-                currentAudio.play().catch(e => displayError('Audio playback failed: ' + e.message));
+                currentAudio.play().catch(e => {
+                    console.error('Audio playback error:', e);
+                    displayError('Audio playback failed: ' + e.message);
+                });
+                
                 currentAudio.onended = () => {
                     currentAudio = null;
                     muteButton.classList.remove('glowing');
@@ -992,7 +1056,20 @@
             console.error(message);
             const div = document.createElement('div');
             div.className = 'error-message';
-            div.textContent = message;
+            
+            // Add browser-specific guidance
+            let browserMessage = message;
+            if (message.includes('network') || message.includes('not supported')) {
+                browserMessage += '\n\nBrowser Compatibility:\n' +
+                    '• Chrome: Full support\n' +
+                    '• Edge: Full support\n' +
+                    '• Firefox: Partial support\n' +
+                    '• Safari: Limited support\n' +
+                    '• Arc: Limited support\n\n' +
+                    'For best experience, please use Chrome or Edge.';
+            }
+            
+            div.textContent = browserMessage;
             chatContainer.appendChild(div);
             scrollToBottom();
         }
@@ -1170,13 +1247,13 @@
                 }));
 
                 // Call backend chat endpoint
-                const response = await fetch("/api/chat", {
+                const response = await fetch("/chat", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         text, 
                         history: sanitizedHistory,
-                        is_speech: isSpeech
+                        is_speech: isSpeech // Use the isSpeech from the queue item
                     })
                 });
 
@@ -1204,7 +1281,7 @@
                     role: 'assistant', 
                     text: data.responses[0],
                     timestamp: new Date().toISOString(),
-                    isSpeech: isSpeech
+                    isSpeech: isSpeech // Use the isSpeech from the queue item
                 };
                 chatHistory.push(botMessage);
                 localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
@@ -1236,68 +1313,126 @@
             }
         }
 
-        // Check microphone permission
-        async function checkMicPermission() {
-            try {
-                const permission = await navigator.permissions.query({ name: 'microphone' });
-                return permission.state === 'granted' || permission.state === 'prompt';
-            } catch (error) {
-                console.error('Permission query error:', error);
-                return false;
-            }
-        }
-
-        // Toggle speech recognition
+        // Update toggleSpeechRecognition function
         async function toggleSpeechRecognition() {
-            if (!recognition) return;
-
             const micButton = document.getElementById('mic-button');
+            
             if (isRecognizing) {
-                recognition.stop();
+                if (isWebSpeechSupported && recognition) {
+                    recognition.stop();
+                } else if (mediaRecorder && mediaRecorder.state === 'recording') {
+                    mediaRecorder.stop();
+                }
                 return;
             }
 
-            // *** NEW LOGIC: Stop audio if currently playing ***
+            // Stop any playing audio
             if (isStreaming || currentAudio) {
                 stopAudioStream();
             }
-            // *** END NEW LOGIC ***
-
-            // Check microphone permission
-            const hasPermission = await checkMicPermission();
-            if (!hasPermission) {
-                displayError('Microphone access denied. Please allow microphone permissions in your browser settings.');
-                return;
-            }
-
-            isRecognizing = true;
-            micButton.classList.add('recording');
 
             try {
-                recognition.start();
+                if (isWebSpeechSupported && recognition) {
+                    // Use Web Speech API
+                    recognition.onstart = () => {
+                        isRecognizing = true;
+                        micButton.classList.add('recording');
+                    };
+
+                    recognition.onend = () => {
+                        isRecognizing = false;
+                        micButton.classList.remove('recording');
+                    };
+
+                    recognition.onresult = (event) => {
+                        const transcript = event.results[0][0].transcript;
+                        document.getElementById('user-input').value = transcript;
+                        lastInputWasSpeech = true;
+                        enqueueMessage();
+                    };
+
+                    recognition.onerror = (event) => {
+                        console.error('Speech recognition error:', event.error);
+                        if (event.error === 'network') {
+                            // Fallback to server-side transcription
+                            startServerSideTranscription();
+                        } else {
+                            displayError(`Speech recognition error: ${event.error}`);
+                        }
+                        isRecognizing = false;
+                        micButton.classList.remove('recording');
+                    };
+
+                    recognition.start();
+                } else {
+                    // Fallback to server-side transcription
+                    startServerSideTranscription();
+                }
             } catch (error) {
-                displayError('Failed to start speech recognition: ' + error.message);
-                isRecognizing = false;
-                micButton.classList.remove('recording');
+                console.error('Speech recognition error:', error);
+                // Fallback to server-side transcription
+                startServerSideTranscription();
+            }
+        }
+
+        // Server-side transcription fallback
+        async function startServerSideTranscription() {
+            const micButton = document.getElementById('mic-button');
+            
+            if (!isMediaRecorderSupported) {
+                displayError('Audio recording not supported in this browser. Please use Chrome or Edge.');
                 return;
             }
 
-            recognition.onresult = async (event) => {
-                const text = event.results[0][0].transcript;
-                document.getElementById('user-input').value = text;
-                lastInputWasSpeech = true;
-                enqueueMessage();
-            };
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
 
-            recognition.onend = () => {
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const formData = new FormData();
+                    formData.append('audio', audioBlob, 'recording.wav');
+
+                    try {
+                        const response = await fetch('/transcribe', {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`HTTP error ${response.status}`);
+                        }
+
+                        const data = await response.json();
+                        if (data.text) {
+                            document.getElementById('user-input').value = data.text;
+                            lastInputWasSpeech = true;
+                            enqueueMessage();
+                        } else {
+                            displayError('No speech detected. Please try again.');
+                        }
+                    } catch (error) {
+                        displayError('Speech transcription error: ' + error.message);
+                    } finally {
+                        isRecognizing = false;
+                        micButton.classList.remove('recording');
+                        stream.getTracks().forEach(track => track.stop());
+                    }
+                };
+
+                isRecognizing = true;
+                micButton.classList.add('recording');
+                mediaRecorder.start();
+            } catch (error) {
+                displayError('Failed to start audio recording: ' + error.message);
                 isRecognizing = false;
                 micButton.classList.remove('recording');
-            };
-
-            recognition.onerror = (event) => {
-                displayError('Speech recognition error: ' + event.error);
-                recognition.stop();
-            };
+            }
         }
 
         // Handle Enter key to send message
