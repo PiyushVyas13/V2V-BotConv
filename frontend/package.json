@@ -1,0 +1,12 @@
+{
+  "name": "pgp-gpt-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for PGP-GPT application",
+  "scripts": {
+    "build": "mkdir -p dist && cp -r src/* dist/",
+    "start": "serve dist"
+  },
+  "dependencies": {
+    "serve": "^14.2.1"
+  }
+} 
