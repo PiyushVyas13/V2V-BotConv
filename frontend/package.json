@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Frontend for PGP-GPT application",
   "scripts": {
-    "build": "mkdir -p dist && cp -r src/* dist/ && cp -r public/* dist/",
+    "build": "cd frontend && mkdir -p dist && cp -r src/* dist/ && cp -r public/* dist/",
     "start": "serve dist"
   },
   "dependencies": {
