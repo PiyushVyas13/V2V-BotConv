@@ -10,11 +10,11 @@ from pathlib import Path
 # Add the parent directory to Python path
 sys.path.append(str(Path(__file__).parent.parent))
 
-from core.llm import LLMHandler
-from core.pdf_processor import PDFProcessor
-from core.rag import RAGSystem
-from core.tts import TextToSpeech
-from core.stt import SpeechToText
+from api.llm import LLMHandler
+from api.pdf_processor import PDFProcessor
+from api.rag import RAGSystem
+from api.tts import TextToSpeech
+from api.stt import SpeechToText
 import logging
 import uvicorn
 import json
