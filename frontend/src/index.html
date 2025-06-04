@@ -748,7 +748,7 @@
             if (isMuted) return;
 
             try {
-                const response = await fetch("/api/stream_audio", {
+                const response = await fetch("https://v2v-botconv-kb0x.onrender.com/api/stream_audio", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
@@ -1170,7 +1170,7 @@
                 }));
 
                 // Call backend chat endpoint
-                const response = await fetch("/api/chat", {
+                const response = await fetch("https://v2v-botconv-kb0x.onrender.com/api/chat", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
