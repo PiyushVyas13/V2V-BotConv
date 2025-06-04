@@ -15,6 +15,7 @@ import uvicorn
 import json
 from gtts import gTTS  # Import gTTS for text-to-speech
 import io  # For handling in-memory bytes
+import base64  # For encoding audio data to base64
 
 # Set up logging with more detailed format
 logging.basicConfig(
@@ -188,33 +189,59 @@ async def upload_pdf(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/stream_audio")
-async def stream_audio(request: ChatRequest):
+async def stream_audio(request: Request):
     try:
-        logger.info(f"Received audio stream request for text: {request.text}")
+        data = await request.json()
+        text = data.get("text", "")
+        history = data.get("history", [])
 
-        if not request.text:
-            raise HTTPException(status_code=400, detail="No text provided for audio streaming")
+        if not text:
+            raise HTTPException(status_code=400, detail="No text provided")
 
-        # Generate speech using gTTS
-        tts = gTTS(text=request.text, lang='en', slow=False)
+        # Use the TextToSpeech instance from tts.py
+        from tts import tts
+        audio_path = tts.text_to_speech(text)
 
-        # Save the audio to an in-memory buffer
-        audio_buffer = io.BytesIO()
-        tts.write_to_fp(audio_buffer)
-        audio_buffer.seek(0)
+        # Read the audio file and convert to base64
+        with open(audio_path, "rb") as audio_file:
+            audio_data = audio_file.read()
+            audio_base64 = base64.b64encode(audio_data).decode()
 
-        # Return the audio as a streaming response
-        return StreamingResponse(
-            audio_buffer,
-            media_type="audio/mp3",
-            headers={
-                "Content-Disposition": "inline; filename=audio.mp3"
-            }
-        )
+        # Clean up the temporary file
+        tts.cleanup(audio_path)
 
+        return JSONResponse({
+            "status": "success",
+            "audio": audio_base64
+        })
     except Exception as e:
         logger.error(f"Audio streaming error: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to generate audio: {str(e)}")
+
+@app.post("/transcribe")
+async def transcribe_audio(file: UploadFile = File(...)):
+    try:
+        logger.info("Received audio transcription request")
+
+        # Read audio data
+        audio_data = await file.read()
+
+        # Use the SpeechToText instance from stt.py
+        from stt import stt
+        text, detected_language = await stt.transcribe_audio(audio_data)
+
+        logger.info(f"Transcribed text: {text}, Language: {detected_language}")
+
+        return JSONResponse(
+            {
+                "status": "success",
+                "text": text,
+                "language": detected_language
+            }
+        )
+    except Exception as e:
+        logger.error(f"Transcription error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to transcribe audio: {str(e)}")
 
 def start():
     """Start the FastAPI server with uvicorn"""

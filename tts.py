@@ -1,39 +1,77 @@
-import io
-import base64
 from gtts import gTTS
+import tempfile
+import os
 import logging
+from typing import Optional, Dict
 
-# Set up logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-def text_to_speech(text, lang='en'):
-    """
-    Convert input text to speech using gTTS and return audio bytes.
-    
-    Args:
-        text (str): The text to convert to speech.
-        lang (str): Language code ('en' for English, 'hi' for Hindi).
+class TextToSpeech:
+    def __init__(self):
+        """
+        Initialize the Text-to-Speech handler with gTTS.
+        """
+        self.logger = logging.getLogger(__name__)
+        self.logger.info("Initialized gTTS")
         
-    Returns:
-        bytes: Audio data in MP3 format, or None if an error occurs.
-    """
-    try:
-        # Validate language
-        if lang not in ['en', 'hi']:
-            raise ValueError("Unsupported language. Use 'en' for English or 'hi' for Hindi.")
+        # Language codes supported by gTTS
+        self.supported_languages = {
+            "en": "en",
+            "hi": "hi",
+            "gu": "gu",
+            # Add more languages as needed
+        }
+        
+        # Set default speed to 1.5x
+        self.speed = 1.5
 
-        # Create gTTS object
-        tts = gTTS(text=text, lang=lang, slow=False)
+    def text_to_speech(self, text: str, language: str = "en") -> str:
+        """
+        Convert text to speech and save as audio file.
+        
+        Args:
+            text (str): Text to convert to speech
+            language (str): Language code (e.g., 'en', 'hi', 'gu')
+            
+        Returns:
+            str: Path to the generated audio file
+        """
+        try:
+            # Default to English if language not supported
+            if language not in self.supported_languages:
+                self.logger.warning(f"Language {language} not supported, defaulting to English")
+                language = "en"
 
-        # Save to bytes buffer
-        audio_buffer = io.BytesIO()
-        tts.write_to_fp(audio_buffer)
-        audio_bytes = audio_buffer.getvalue()
-        audio_buffer.close()
+            # Create temporary file for audio
+            temp_file = tempfile.NamedTemporaryFile(suffix=".mp3", delete=False)
+            temp_path = temp_file.name
+            temp_file.close()
 
-        return audio_bytes
+            # Generate speech using gTTS with precise speed control
+            tts = gTTS(text=text, lang=language, slow=False)
+            tts.save(temp_path)
 
-    except Exception as e:
-        logger.error(f"Error generating audio: {e}")
-        return None
+            # Apply speed adjustment using ffmpeg
+            output_path = temp_path.replace('.mp3', '_speed.mp3')
+            os.system(f'ffmpeg -i {temp_path} -filter:a "atempo={self.speed}" {output_path} -y')
+            os.remove(temp_path)  # Remove original file
+
+            return output_path
+
+        except Exception as e:
+            self.logger.error(f"Error in text-to-speech conversion: {str(e)}")
+            raise
+
+    def cleanup(self, file_path: str):
+        """
+        Clean up temporary audio file.
+        
+        Args:
+            file_path (str): Path to the file to clean up
+        """
+        try:
+            if os.path.exists(file_path):
+                os.unlink(file_path)
+        except Exception as e:
+            self.logger.error(f"Error cleaning up file {file_path}: {str(e)}")
+
+# Create a singleton instance
+tts = TextToSpeech()
