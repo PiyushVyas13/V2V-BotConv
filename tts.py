@@ -24,17 +24,17 @@ class TextToSpeech:
         self.speed = 1.5
 
     def text_to_speech(self, text: str, language: str = "en") -> str:
-        """
+    """
         Convert text to speech and save as audio file.
-        
-        Args:
+    
+    Args:
             text (str): Text to convert to speech
             language (str): Language code (e.g., 'en', 'hi', 'gu')
-            
-        Returns:
+        
+    Returns:
             str: Path to the generated audio file
-        """
-        try:
+    """
+    try:
             # Default to English if language not supported
             if language not in self.supported_languages:
                 self.logger.warning(f"Language {language} not supported, defaulting to English")
@@ -56,7 +56,7 @@ class TextToSpeech:
 
             return output_path
 
-        except Exception as e:
+    except Exception as e:
             self.logger.error(f"Error in text-to-speech conversion: {str(e)}")
             raise
 

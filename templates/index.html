@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PGP-GPT</title>
+    <title>PGP-GT</title>
     <!-- MathJax for LaTeX rendering -->
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>
@@ -517,47 +517,23 @@
         @media (max-width: 768px) {
             .container {
                 border-radius: 8px;
-            }
-
-            .message-bubble {
-                max-width: 85%;
-            }
-
-            .input-container {
-                flex-direction: row;
-                flex-wrap: wrap;
-                gap: 6px;
-                padding: 8px;
-            }
-
-            .input-textarea {
-                height: 40px;
-                font-size: 14px;
-                padding: 8px 12px;
-            }
-
-            .send-button, .mic-button, .mute-button {
-                padding: 8px;
-                font-size: 14px;
-                min-width: 36px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                border-radius: 0;
+                padding: 15px;
             }
 
             .header {
-                padding: 8px;
+                padding: 10px;
             }
 
             .header .logo {
-                width: 30px;
+                width: 40px;
             }
 
             .header h1 {
-                font-size: 14px;
+                font-size: 18px;
+            }
+
+            .toggle-container {
+                gap: 4px;
             }
 
             .toggle-label {
@@ -565,55 +541,210 @@
             }
 
             .toggle-switch {
-                width: 32px;
-                height: 16px;
+                width: 30px;
+                height: 15px;
             }
 
             .slider:before {
-                height: 12px;
-                width: 12px;
+                height: 11px;
+                width: 11px;
+                bottom: 2px;
+                left: 2px;
             }
 
             input:checked + .slider:before {
-                transform: translateX(16px);
+                transform: translateX(15px);
             }
 
             .chat-container {
-                padding: 8px;
-                gap: 6px;
+                padding: 10px;
+                gap: 8px;
+            }
+
+            .welcome-message-area {
+                max-width: 95%;
+            }
+
+            .welcome-text {
+                font-size: 1.2rem;
+            }
+
+            .question-text {
+                font-size: 1rem;
+            }
+
+            .chat-container::-webkit-scrollbar {
+                width: 3px;
+            }
+
+            .chat-container::-webkit-scrollbar-thumb {
+                border-radius: 2px;
             }
 
             .message-bubble {
-                max-width: 90%;
-                font-size: 13px;
-                padding: 8px 12px;
+                padding: 10px 14px;
+                border-radius: 12px;
+                font-size: 14px;
             }
 
-            .timestamp {
-                font-size: 10px;
+            .message-bubble table,
+            .message-bubble th,
+            .message-bubble td {
+                font-size: 13px;
+                padding: 8px;
+            }
+
+            .message-bubble h3 {
+                font-size: 1em;
+                margin: 15px 0 8px 0;
             }
 
             .avatar {
-                width: 20px;
-                height: 20px;
-                margin: 0 4px;
+                width: 30px;
+                height: 30px;
+                margin: 0 6px;
+            }
+
+            .input-container {
+                padding: 10px;
+                gap: 6px;
+                flex-wrap: nowrap;
             }
 
             .input-textarea {
+                height: 40px;
+                padding: 8px 12px;
+                font-size: 14px;
+                flex-grow: 1;
+            }
+
+            .send-button, .mic-button, .mute-button {
+                padding: 8px;
+                width: 40px;
+                height: 40px;
+                font-size: 14px;
+            }
+
+            .send-button {
+                padding: 8px 16px;
+                min-width: 40px;
+                height: 40px;
+            }
+
+            .sheets-button {
+                width: 40px;
+                height: 40px;
+                margin-left: 6px;
+                border-radius: 10px;
+            }
+
+            .footer {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                border-radius: 0;
+                padding: 10px;
+            }
+
+            .header {
+                padding: 6px;
+            }
+
+            .header .logo {
+                width: 35px;
+            }
+
+            .header h1 {
+                font-size: 16px;
+            }
+
+            .toggle-switch {
+                width: 28px;
+                height: 14px;
+            }
+
+            .slider:before {
+                height: 10px;
+                width: 10px;
+                bottom: 2px;
+                left: 2px;
+            }
+
+            input:checked + .slider:before {
+                transform: translateX(14px);
+            }
+
+            .chat-container {
+                padding: 6px;
+                gap: 4px;
+            }
+
+            .message-bubble {
+                padding: 8px 10px;
+                border-radius: 10px;
                 font-size: 13px;
-                padding: 6px 10px;
+            }
+
+            .message-bubble table,
+            .message-bubble th,
+            .message-bubble td {
+                font-size: 12px;
+                padding: 6px;
+            }
+
+            .message-bubble h3 {
+                font-size: 0.9em;
+                margin: 10px 0 6px 0;
+            }
+
+            .timestamp {
+                font-size: 9px;
+            }
+
+            .avatar {
+                width: 25px;
+                height: 25px;
+                margin: 0 4px;
+            }
+
+            .input-container {
+                padding: 8px;
+                gap: 4px;
+            }
+
+            .input-textarea {
                 height: 36px;
+                padding: 6px 10px;
+                font-size: 13px;
             }
 
             .send-button, .mic-button, .mute-button {
                 padding: 6px;
+                width: 36px;
+                height: 36px;
                 font-size: 13px;
-                min-width: 32px;
+                border-radius: 8px;
+            }
+
+            .send-button {
+                padding: 6px 12px;
+                height: 36px;
+            }
+
+            .sheets-button {
+                width: 36px;
+                height: 36px;
+                margin-left: 4px;
+                border-radius: 8px;
             }
 
             .footer {
-                font-size: 12px;
-                padding: 8px;
+                padding: 6px;
+                font-size: 11px;
             }
         }
 
@@ -698,11 +829,51 @@
         .send-button.glowing {
              animation: glow 0.8s infinite alternate ease-in-out;
         }
+
+        /* Styles for inline preview table */
+        .table-wrapper-scroll {
+            overflow-x: auto;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .preview-table-inline {
+            width: auto; /* Allow table to be wider than its container */
+            min-width: 100%; /* Ensure it takes at least 100% width if content is small */
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden; /* For rounded corners */
+        }
+
+        .preview-table-inline th,
+        .preview-table-inline td {
+            padding: 12px; /* Increased padding for better readability */
+            border: 1px solid #ed5d05; /* Same border color */
+            text-align: left;
+            white-space: nowrap; /* Prevent text wrapping in headers */
+            color: #000; /* Text color for content */
+        }
+
+        .preview-table-inline th {
+            background: #ed5d0587; /* Header background */
+            color: #000; /* Header text color */
+            font-weight: 600;
+            white-space: normal; /* Allow text wrapping in headers */
+        }
+        
+        .preview-table-inline tr:nth-child(even) {
+            background: rgba(235, 119, 37, 0.05); /* Alternating row background */
+        }
+
+        .preview-table-inline tr:hover {
+            background: rgba(37, 99, 235, 0.1); /* Hover effect */
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    
+
     <div class="container">
         <!-- Header Component -->
         <div class="header">
@@ -804,94 +975,21 @@
         // Check for MediaRecorder support
         const isMediaRecorderSupported = !!(navigator.mediaDevices && window.MediaRecorder);
 
-        // Function to stream audio from the backend
-        async function streamAudio(text, history) {
-            if (isMuted) return;
-
-            try {
-                const response = await fetch("/stream_audio", {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        text,
-                        history: history || []
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error ${response.status}`);
-                }
-
-                const data = await response.json();
-                if (data.status === "success" && data.audio) {
-                    playAudio(data.audio);
-                } else {
-                    throw new Error('Invalid audio data received from server');
-                }
-            } catch (error) {
-                console.error('Audio streaming error:', error);
-                throw error;
-            }
-        }
-
-        // Initialize mute button state
-        const muteButton = document.getElementById('mute-button');
-        updateMuteButton();
-
-        // Toggle mute state
-        function toggleMute() {
-            isMuted = !isMuted;
-            localStorage.setItem('isMuted', JSON.stringify(isMuted));
-            updateMuteButton();
-            if (isMuted) {
-                stopAudioStream();
-            }
-        }
-
-        // Update mute button appearance
-        function updateMuteButton() {
-            muteButton.classList.toggle('muted', isMuted);
-        }
-
-        // Stop audio stream
-        function stopAudioStream() {
-            if (sourceNode) {
-                sourceNode.stop();
-                sourceNode.disconnect();
-                sourceNode = null;
-            }
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio = null;
-            }
-            isStreaming = false;
-            if (audioContext.state === 'running') {
-                audioContext.suspend();
-            }
-            const muteButton = document.getElementById('mute-button');
-            muteButton.classList.remove('glowing');
-        }
-
-        // Play audio with interrupt capability
-        function playAudio(audioData) {
-            stopAudioStream(); // Interrupt any currently playing audio
-            if (!isMuted) {
-                const muteButton = document.getElementById('mute-button');
-                muteButton.classList.add('glowing');
-                
-                // Create and play the audio from base64 data
-                currentAudio = new Audio(`data:audio/mp3;base64,${audioData}`);
-                currentAudio.play().catch(e => {
-                    console.error('Audio playback error:', e);
-                    displayError('Audio playback failed: ' + e.message);
-                });
-                
-                currentAudio.onended = () => {
-                    currentAudio = null;
-                    muteButton.classList.remove('glowing');
-                };
-            }
-        }
+        // Define HEADERS for the Excel sheet, mirroring backend
+        const headers = [
+            "Sr. No.",
+            "Description of the Contract",
+            "Name of the first Party",
+            "Name of the second Party",
+            "Date of Request",
+            "Purpose",
+            "Agreement Commencement date",
+            "Duration of the Agreement",
+            "Department Responsibility",
+            "Internal Status",
+            "Signed Copy RECEIVED on IVALUA (Y/N)",
+            "Uploaded on IVALUA"
+        ];
 
         // Load and sanitize chat history from local storage
         let chatHistory = [];
@@ -908,18 +1006,18 @@
                 } else {
                     // Server hasn't been reloaded, load existing history
                     chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
-                    chatHistory = chatHistory.filter(msg => {
-                        if (!msg.role || !msg.text) return false;
-                        return true;
-                    }).map(msg => {
-                        return {
-                            role: msg.role || 'user',
-                            text: msg.text,
-                            timestamp: msg.timestamp || new Date().toISOString(),
-                            isSpeech: msg.isSpeech || false
-                        };
-                    });
-                    localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+        chatHistory = chatHistory.filter(msg => {
+            if (!msg.role || !msg.text) return false;
+            return true;
+        }).map(msg => {
+            return {
+                role: msg.role || 'user',
+                text: msg.text,
+                timestamp: msg.timestamp || new Date().toISOString(),
+                isSpeech: msg.isSpeech || false
+            };
+        });
+        localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
                 }
                 // Render initial chat history
                 chatHistory.forEach(renderMessage);
@@ -1026,7 +1124,7 @@
                 if (!isTyping) {
                     // Ensure full content is rendered even if typing is interrupted
                     messageTextElement.innerHTML = marked.parse(text); // Parse full markdown
-                    MathJax.typesetPromise([div]).catch((err) => console.error('MathJax typesetting failed:', err));
+                        MathJax.typesetPromise([div]).catch((err) => console.error('MathJax typesetting failed:', err));
                     if (callback) callback();
                     return;
                 }
@@ -1101,6 +1199,9 @@
 
         let sheetsModeEnabled = false;
 
+        // Variable to hold the current preview message element
+        let currentPreviewMessageElement = null;
+
         function toggleSheetsMode() {
             sheetsModeEnabled = !sheetsModeEnabled;
             const sheetsButton = document.getElementById('sheets-button');
@@ -1108,11 +1209,17 @@
             
             sheetsButton.classList.toggle('active', sheetsModeEnabled);
             inputTextarea.placeholder = sheetsModeEnabled ? 
-                "Type your message for Sheets..." : 
+                "Enter contract details in natural language..." : 
                 "Type your message...";
+            
+            // Hide/remove the preview table when switching modes
+            if (currentPreviewMessageElement) {
+                removeElement(currentPreviewMessageElement);
+                currentPreviewMessageElement = null;
+            }
         }
 
-        // Modify the enqueueMessage function to handle sheets mode and interrupt
+        // Modify the enqueueMessage function to handle sheets mode
         async function enqueueMessage() {
             const input = document.getElementById('user-input');
             const text = input.value.trim();
@@ -1126,7 +1233,7 @@
                 isTyping = false;
                 clearTimeout(typingTimeout);
                 queryQueue = [];
-                stopAudioStream();
+                // Do not stop audio stream here, it's handled by playAudio
                 const loader = document.querySelector('.loader');
                 const typingIndicator = document.querySelector('.typing-indicator');
                 removeElement(loader);
@@ -1134,6 +1241,12 @@
                 sendButton.classList.remove('processing');
                 sendIcon.style.display = 'block';
                 stopIcon.style.display = 'none';
+                
+                // Hide/remove the preview table if interrupting
+                if (currentPreviewMessageElement) {
+                    removeElement(currentPreviewMessageElement);
+                    currentPreviewMessageElement = null;
+                }
                 return;
             }
 
@@ -1146,16 +1259,19 @@
                     sendIcon.style.display = 'none';
                     stopIcon.style.display = 'block';
 
+                    // Hide any previously displayed preview table if still present
+                    if (currentPreviewMessageElement) {
+                        removeElement(currentPreviewMessageElement);
+                        currentPreviewMessageElement = null;
+                    }
+
                     // Show loading state
                     const loader = displayLoader();
 
-                    const response = await fetch("/sheets", {
+                    const response = await fetch("http://localhost:8005/api/preview", {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ 
-                            text,
-                            history: chatHistory.slice(-5)
-                        })
+                        body: JSON.stringify({ input: text })
                     });
 
                     // Remove loader
@@ -1167,35 +1283,128 @@
 
                     const data = await response.json();
 
-                    if (data.status === "success") {
-                        // Add success message to chat
-                        const successMessage = {
-                            role: 'assistant',
-                            text: data.message, // Use the markdown table from the response
-                            timestamp: new Date().toISOString()
+                    if (data.success) {
+                        // Create a new message div for the preview table
+                        const previewMessageDiv = document.createElement('div');
+                        previewMessageDiv.className = `message bot-message`;
+                        previewMessageDiv.innerHTML = `
+                            <img src="https://ui-avatars.com/api/?name=Bot&background=5A5A5A&color=e5e7eb&size=40" class="avatar bot-avatar" alt="Bot Avatar">
+                            <div class="message-bubble">
+                                <h3>Preview Parsed Data</h3>
+                                <div class="table-wrapper-scroll">
+                                    <table class="preview-table-inline">
+                                        <thead>
+                                            <tr class="preview-table-headers-inline"></tr>
+                                        </thead>
+                                        <tbody class="preview-table-body-inline"></tbody>
+                                    </table>
+                                </div>
+                                <div class="duplicate-info-inline mt-4"></div>
+                                <button class="send-button submit-preview-btn-inline" style="margin-top: 10px;">
+                                    Submit to Excel
+                                </button>
+                            </div>
+                        `;
+                        chatContainer.appendChild(previewMessageDiv);
+                        scrollToBottom();
+
+                        currentPreviewMessageElement = previewMessageDiv; // Store reference
+
+                        const previewTableHeadersRow = previewMessageDiv.querySelector('.preview-table-headers-inline');
+                        const previewTableBody = previewMessageDiv.querySelector('.preview-table-body-inline');
+                        const duplicateInfo = previewMessageDiv.querySelector('.duplicate-info-inline');
+                        const submitButton = previewMessageDiv.querySelector('.submit-preview-btn-inline');
+
+                        // Populate table headers and values
+                        const valuesRow = previewTableBody.insertRow(); // Only one row for values
+
+                        for (const header of headers) {
+                            const th = document.createElement('th');
+                            th.textContent = header.replace(/\(Y\/N\)/, '').replace(/_OF_THE/, '').replace(/_/, ' ').replace(/  /g, ' ').trim(); // Clean header for display
+                            previewTableHeadersRow.appendChild(th);
+
+                            const td = valuesRow.insertCell();
+                            td.textContent = data.preview[header] || '';
+                        }
+
+                        // Populate duplicate info
+                        let overwriteNeeded = false;
+                        if (data.duplicate_info.full_duplicate) {
+                            duplicateInfo.innerHTML = `<p style="color: #ef4444;">Warning: Exact duplicate found at row ${data.duplicate_info.row}</p>`;
+                        } else if (data.duplicate_info.sr_no_duplicate) {
+                            duplicateInfo.innerHTML = `<p style="color: #f59e0b;">Warning: Duplicate Sr. No. found at row ${data.duplicate_info.row}</p>`;
+                            overwriteNeeded = true;
+                        } else {
+                            duplicateInfo.innerHTML = '';
+                        }
+
+                        // Add submit button handler
+                        submitButton.onclick = async () => {
+                            try {
+                                submitButton.disabled = true;
+                                submitButton.textContent = 'Submitting...';
+                                
+                                const submitResponse = await fetch("http://localhost:8005/api/submit", {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ 
+                                        input: text,
+                                        overwrite: overwriteNeeded // Use the detected overwriteNeeded flag
+                                    })
+                                });
+
+                                const submitData = await submitResponse.json();
+                                
+                                if (submitData.success) {
+                                    // Add success message to chat
+                                    const successMessage = {
+                                        role: 'assistant',
+                                        text: `✅ ${submitData.message}`,
+                                        timestamp: new Date().toISOString()
+                                    };
+                                    chatHistory.push(successMessage);
+                                    localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+                                    renderMessage(successMessage);
+                                    
+                                    // Remove the preview table from the chat after submission
+                                    if (currentPreviewMessageElement) {
+                                        removeElement(currentPreviewMessageElement);
+                                        currentPreviewMessageElement = null;
+                                    }
+                                } else {
+                                    throw new Error(submitData.error || 'Failed to submit data');
+                                }
+                            } catch (error) {
+                                displayError(`Error submitting data: ${error.message}`);
+                            } finally {
+                                submitButton.disabled = false;
+                                submitButton.textContent = 'Submit to Excel';
+                            }
                         };
-                        chatHistory.push(successMessage);
-                        localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
-                        renderMessage(successMessage); // Render directly as the backend provides markdown
                     } else {
-                        throw new Error(data.message || 'Failed to update sheets');
+                        throw new Error(data.error || 'Failed to preview data');
                     }
                 } catch (error) {
                     console.error('Sheets error:', error);
-                    displayError(`Error updating sheets: ${error.message}`);
+                    displayError(`Error previewing data: ${error.message}`);
                 } finally {
                     sendButton.classList.remove('processing');
                     sendIcon.style.display = 'block';
                     stopIcon.style.display = 'none';
                 }
             } else {
+                // Hide/remove the preview table if not in sheets mode
+                if (currentPreviewMessageElement) {
+                    removeElement(currentPreviewMessageElement);
+                    currentPreviewMessageElement = null;
+                }
+
                 // Handle normal chat mode
                 queryQueue.push({ text, isSpeech: lastInputWasSpeech });
-                // Reset lastInputWasSpeech to false if the input was typed
                 if (!lastInputWasSpeech) {
                     lastInputWasSpeech = false;
                 }
-                processNextQuery(); // Start processing immediately
+                processNextQuery();
             }
 
             input.value = ''; // Clear input immediately
@@ -1229,6 +1438,14 @@
             chatHistory.push(userMessage);
             localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
             renderMessage(userMessage);
+
+            // Remove the welcome message after the first user message
+            if (chatHistory.length === 1 && !sheetsModeEnabled) { // Check if it's the very first message and not in sheets mode
+                const welcomeArea = document.querySelector('.welcome-message-area');
+                if (welcomeArea) {
+                    welcomeArea.remove();
+                }
+            }
 
             // Show loader to reserve space
             const loader = displayLoader();
