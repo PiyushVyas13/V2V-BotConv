@@ -1,6 +1,6 @@
 # AI Chatbot with PDF Processing
 
-This project implements an AI chatbot that can process and answer questions about PDF documents using RAG (Retrieval Augmented Generation). OPEN AI
+This project implements an AI chatbot that can process and answer questions about PDF documents using RAG (Retrieval Augmented Generation). OPEN AI.
 
 ## Features
 
