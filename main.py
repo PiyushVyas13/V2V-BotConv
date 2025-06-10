@@ -104,7 +104,7 @@ class SheetRequest(BaseModel):
 @app.get("/", response_class=HTMLResponse)
 async def get_index(request: Request):
     logger.info("Serving index page")
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse("PGP.html", {"request": request})
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
