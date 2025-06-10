@@ -385,6 +385,8 @@ async def get_sheets_mode():
     }
 
 if __name__ == "__main__":
+    import dotenv
+    dotenv.load_dotenv()
     import uvicorn
     initialize_excel()
     uvicorn.run(app, host="0.0.0.0", port=8005)
