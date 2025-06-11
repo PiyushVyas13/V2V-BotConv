@@ -32,7 +32,8 @@ class LLMHandler:
     def generate_response(self, 
                          query: str, 
                          context: List[Dict], 
-                         conversation_history: Optional[str] = None) -> Dict:
+                         conversation_history: Optional[str] = None,
+                         chat_history: Optional[List[Dict]] = None) -> Dict:
         """
         Generate a response using the LLM.
         
@@ -40,6 +41,7 @@ class LLMHandler:
             query: User query
             context: Retrieved context from RAG system
             conversation_history: Optional conversation history string
+            chat_history: Optional chat history list for additional context
             
         Returns:
             Dict: Response containing text and optional audio
@@ -53,6 +55,14 @@ class LLMHandler:
             system_message = "You are a helpful AI assistant. Use the following context to answer the user's question."
             if conversation_history:
                 system_message += f"\n\n{conversation_history}"
+            if chat_history:
+                # Add recent chat history for additional context
+                recent_history = "\n\nRecent conversation:\n"
+                for msg in chat_history[-3:]:  # Only use last 3 messages for context
+                    role = msg.get('role', 'user')
+                    text = msg.get('text', '')
+                    recent_history += f"{role.title()}: {text}\n"
+                system_message += recent_history
             if context_text:
                 system_message += f"\n\nRelevant context:\n{context_text}"
 

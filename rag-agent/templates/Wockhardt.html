@@ -1008,7 +1008,11 @@
             if (isMuted) return;
 
             try {
+<<<<<<< HEAD:rag-agent/templates/Wockhardt.html
                 const response = await fetch("/stream_audio", {
+=======
+                const response = await fetch("https://v2v-botconv-kb0x.onrender.com/api/stream_audio", {
+>>>>>>> 1f61a94c146d2ed2063b62549cc46c5743e429e7:frontend/src/index.html
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
@@ -1450,7 +1454,11 @@
                 }));
 
                 // Call backend chat endpoint
+<<<<<<< HEAD:rag-agent/templates/Wockhardt.html
                 const response = await fetch("/chat", {
+=======
+                const response = await fetch("https://v2v-botconv-kb0x.onrender.com/api/chat", {
+>>>>>>> 1f61a94c146d2ed2063b62549cc46c5743e429e7:frontend/src/index.html
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 

@@ -1378,7 +1378,7 @@
                     // Show loading state
                     const loader = displayLoader();
 
-                    const response = await fetch("http://localhost:8005/api/preview", {
+                    const response = await fetch("https://pgp-excel-agent.politegrass-0dd17cd2.centralindia.azurecontainerapps.io/api/preview", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ input: text })

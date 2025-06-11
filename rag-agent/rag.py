@@ -1,8 +1,8 @@
 import os
 from typing import List, Dict, Optional
 import logging
-from pdf_processor import PDFProcessor
-from llm import LLMHandler
+from .pdf_processor import PDFProcessor
+from .llm import LLMHandler
 from pathlib import Path
 from collections import deque
 
@@ -137,30 +137,38 @@ class RAGSystem:
             logger.error(f"Error querying RAG system: {str(e)}")
             return None
 
-    def generate_response(self, query: str, context: List[Dict]) -> Dict:
+    def generate_response(self, query: str, history: List[Dict] = None) -> Dict:
         """
         Generate a response using the LLM handler.
         
         Args:
             query: User query
-            context: Retrieved context from RAG system
+            history: Chat history for context
             
         Returns:
             Dict: Response containing text and optional audio
         """
         try:
+            # First, try to get context from the RAG system
+            context = self.query(query, k=5)
+            
+            # If no context found, use empty context
+            if not context:
+                context = []
+            
             # Get conversation memory context
             memory_context = self.get_memory_context()
             
-            # Generate response with memory context
+            # Generate response with memory context and RAG context
             response = self.llm_handler.generate_response(
                 query, 
                 context, 
-                conversation_history=memory_context
+                conversation_history=memory_context,
+                chat_history=history
             )
             
             # Add to memory if response was successful
-            if response and response["responses"]:
+            if response and response.get("responses"):
                 self.add_to_memory(query, response["responses"][0])
             
             return response
