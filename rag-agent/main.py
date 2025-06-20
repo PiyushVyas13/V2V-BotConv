@@ -67,7 +67,7 @@ app.add_middleware(
 try:
     logger.info("Initializing RAG system components...")
     pdf_processor = PDFProcessor(data_dir="DATA")
-    llm_handler = LLMHandler(model_name="gpt-3.5-turbo")
+    llm_handler = LLMHandler()  # Will use Azure OpenAI deployment from env vars
     rag_system = RAGSystem(pdf_processor, llm_handler)
 
     # Load existing embeddings
@@ -249,7 +249,7 @@ def start():
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
-        port=8001,
+        port=8003,
         reload=True,
         log_level="info"
     )

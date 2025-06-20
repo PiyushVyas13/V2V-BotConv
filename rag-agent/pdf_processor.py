@@ -2,7 +2,6 @@ import os
 from typing import List, Dict
 import numpy as np
 import faiss
-from openai import OpenAI
 from dotenv import load_dotenv
 from llama_index.core import SimpleDirectoryReader, Document
 from llama_index.core.node_parser import SimpleNodeParser
@@ -24,12 +23,25 @@ load_dotenv()
 
 class PDFProcessor:
     def __init__(self, data_dir: str = "DATA"):
-        """Initialize the PDF processor with FAISS vector store and OpenAI embeddings."""
-        self.api_key = os.getenv("OPENAI_API_KEY")
-        if not self.api_key:
-            raise ValueError("OPENAI_API_KEY not found in environment variables")
+        """Initialize the PDF processor with FAISS vector store and Azure OpenAI embeddings."""
+        self.endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
+        self.api_key = os.getenv("AZURE_OPENAI_API_KEY")
+        self.api_version = os.getenv("AZURE_OPENAI_API_VERSION", "2024-12-01-preview")
+        self.embedding_deployment = os.getenv("AZURE_OPENAI_EMBEDDING_DEPLOYMENT", "text-embedding-ada-002")
         
-        self.client = OpenAI(api_key=self.api_key)
+        if not self.endpoint:
+            raise ValueError("AZURE_OPENAI_ENDPOINT not found in environment variables")
+        if not self.api_key:
+            raise ValueError("AZURE_OPENAI_API_KEY not found in environment variables")
+        
+        # Initialize Azure OpenAI client
+        from openai import AzureOpenAI
+        self.client = AzureOpenAI(
+            api_key=self.api_key,
+            api_version=self.api_version,
+            azure_endpoint=self.endpoint
+        )
+        logger.info(f"Azure OpenAI client initialized with embedding deployment: {self.embedding_deployment}")
         
         # Initialize directory structure
         self.data_dir = Path(data_dir)
@@ -41,7 +53,7 @@ class PDFProcessor:
         self.embeddings_dir.mkdir(parents=True, exist_ok=True)
         
         # Initialize FAISS index
-        self.dimension = 1536  # OpenAI ada-002 embedding dimension
+        self.dimension = 1536  # Azure OpenAI ada-002 embedding dimension
         self.index = None  # Will be initialized when we have data
         
         # Document store
@@ -159,15 +171,20 @@ class PDFProcessor:
             self.index.nprobe = min(nlist // 10, 10)  # Number of clusters to search
     
     def _get_embedding(self, text: str) -> np.ndarray:
-        """Get embedding from OpenAI API."""
-        response = self.client.embeddings.create(
-            input=text,
-            model="text-embedding-ada-002"
-        )
-        return np.array(response.data[0].embedding)
+        """Get embedding from Azure OpenAI API."""
+        try:
+            response = self.client.embeddings.create(
+                input=text,
+                model=self.embedding_deployment
+            )
+            return np.array(response.data[0].embedding)
+        except Exception as e:
+            logger.error(f"Error generating embedding with Azure OpenAI: {str(e)}")
+            # Return zero vector as fallback
+            return np.zeros(self.dimension)
     
     def _get_embeddings_batch(self, texts: List[str], batch_size: int = 32) -> np.ndarray:
-        """Get embeddings for a batch of texts."""
+        """Get embeddings for a batch of texts using Azure OpenAI."""
         all_embeddings = []
         
         # Filter out empty or invalid texts
@@ -177,27 +194,27 @@ class PDFProcessor:
             logger.error("No valid texts found for embedding generation")
             return np.array([])
             
-        for i in tqdm(range(0, len(valid_texts), batch_size), desc="Generating embeddings"):
+        for i in tqdm(range(0, len(valid_texts), batch_size), desc="Generating embeddings with Azure OpenAI"):
             batch = valid_texts[i:i + batch_size]
             try:
                 response = self.client.embeddings.create(
                     input=batch,
-                    model="text-embedding-ada-002"
+                    model=self.embedding_deployment
                 )
                 batch_embeddings = [data.embedding for data in response.data]
                 all_embeddings.extend(batch_embeddings)
             except Exception as e:
-                logger.error(f"Error generating embeddings for batch: {str(e)}")
+                logger.error(f"Error generating embeddings for batch with Azure OpenAI: {str(e)}")
                 # If batch processing fails, try processing one by one
                 for text in batch:
                     try:
                         response = self.client.embeddings.create(
                             input=text,
-                            model="text-embedding-ada-002"
+                            model=self.embedding_deployment
                         )
                         all_embeddings.append(response.data[0].embedding)
                     except Exception as e:
-                        logger.error(f"Error generating embedding for text: {str(e)}")
+                        logger.error(f"Error generating embedding for text with Azure OpenAI: {str(e)}")
                         # Add a zero vector as placeholder for failed embeddings
                         all_embeddings.append(np.zeros(self.dimension))
         
@@ -243,7 +260,7 @@ class PDFProcessor:
         # Extract text chunks
         chunks = [node.text for node in nodes]
         
-        # Generate embeddings using OpenAI
+        # Generate embeddings using Azure OpenAI
         logger.info("Generating embeddings...")
         embeddings = self._get_embeddings_batch(chunks)
         
@@ -280,7 +297,7 @@ class PDFProcessor:
     
     def search(self, query: str, k: int = 5) -> List[Dict]:
         """
-        Search for similar documents using FAISS.
+        Search for similar documents using FAISS and Azure OpenAI embeddings.
         
         Args:
             query: Search query
@@ -292,7 +309,7 @@ class PDFProcessor:
         if not self.documents:
             return []
             
-        # Generate query embedding using OpenAI
+        # Generate query embedding using Azure OpenAI
         query_embedding = self._get_embedding(query)
         
         # Search in FAISS index

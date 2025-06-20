@@ -5,13 +5,13 @@ openai
 elevenlabs
 llama-index-core
 llama-index-readers-file
-llama-index-embeddings-openai
+llama-index-embeddings-azure-openai
 llama-index-vector-stores-faiss
 faiss-cpu
 python-multipart
 jinja2
 pydantic
-llama-index-llms-openai==0.4.4
+llama-index-llms-azure-openai
 numpy
 tqdm
 google-auth-oauthlib

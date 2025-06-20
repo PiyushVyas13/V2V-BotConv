@@ -1,8 +1,8 @@
 import os
 from typing import List, Dict, Optional
 import logging
-from .pdf_processor import PDFProcessor
-from .llm import LLMHandler
+from pdf_processor import PDFProcessor
+from llm import LLMHandler
 from pathlib import Path
 from collections import deque
 
@@ -184,7 +184,7 @@ def main():
     try:
         # Initialize components
         pdf_processor = PDFProcessor()
-        llm_handler = LLMHandler(model_name="gpt-3.5-turbo")
+        llm_handler = LLMHandler()  # Will use Azure OpenAI deployment from env vars
         
         # Initialize RAG system
         rag = RAGSystem(pdf_processor, llm_handler)

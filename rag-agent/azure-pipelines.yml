@@ -1,0 +1,146 @@
+# Azure Pipelines YAML for RAG Agent with Azure OpenAI
+trigger:
+- main
+- develop
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  pythonVersion: '3.9'
+  workingDirectory: 'V2V-BotConv/rag-agent'
+
+stages:
+- stage: Build
+  displayName: 'Build and Test'
+  jobs:
+  - job: BuildJob
+    displayName: 'Build RAG Agent'
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(pythonVersion)'
+      displayName: 'Use Python $(pythonVersion)'
+    
+    - script: |
+        cd $(workingDirectory)
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+      displayName: 'Install dependencies'
+    
+    - script: |
+        cd $(workingDirectory)
+        python -m pytest tests/ --junitxml=test-results.xml --cov=. --cov-report=xml
+      displayName: 'Run tests'
+      continueOnError: true
+    
+    - task: PublishTestResults@2
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFiles: '$(workingDirectory)/test-results.xml'
+        testRunTitle: 'RAG Agent Tests'
+    
+    - task: PublishCodeCoverageResults@1
+      condition: succeededOrFailed()
+      inputs:
+        codeCoverageTool: Cobertura
+        summaryFileLocation: '$(workingDirectory)/coverage.xml'
+    
+    - script: |
+        cd $(workingDirectory)
+        # Create deployment package
+        mkdir -p deployment
+        cp -r *.py requirements.txt templates/ static/ DATA/ deployment/
+        tar -czf rag-agent-$(Build.BuildId).tar.gz -C deployment .
+      displayName: 'Create deployment package'
+    
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: '$(workingDirectory)/rag-agent-$(Build.BuildId).tar.gz'
+        artifactName: 'rag-agent-package'
+        publishLocation: 'Container'
+
+- stage: Deploy
+  displayName: 'Deploy to Azure'
+  dependsOn: Build
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  jobs:
+  - deployment: DeployToAzure
+    displayName: 'Deploy RAG Agent to Azure'
+    environment: 'production'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'rag-agent-package'
+              downloadPath: '$(System.ArtifactsDirectory)'
+          
+          - task: AzureWebApp@1
+            displayName: 'Deploy to Azure Web App'
+            inputs:
+              azureSubscription: '$(azureServiceConnection)'
+              appType: 'webAppLinux'
+              appName: '$(azureWebAppName)'
+              package: '$(System.ArtifactsDirectory)/rag-agent-package/rag-agent-$(Build.BuildId).tar.gz'
+              runtimeStack: 'PYTHON|3.9'
+              startUpCommand: 'python main.py'
+              appSettings: |
+                -AZURE_OPENAI_ENDPOINT $(AZURE_OPENAI_ENDPOINT)
+                -AZURE_OPENAI_API_KEY $(AZURE_OPENAI_API_KEY)
+                -AZURE_OPENAI_API_VERSION $(AZURE_OPENAI_API_VERSION)
+                -AZURE_OPENAI_DEPLOYMENT_NAME $(AZURE_OPENAI_DEPLOYMENT_NAME)
+                -AZURE_OPENAI_EMBEDDING_DEPLOYMENT $(AZURE_OPENAI_EMBEDDING_DEPLOYMENT)
+
+# Optional: Container deployment
+- stage: ContainerDeploy
+  displayName: 'Deploy as Container'
+  dependsOn: Build
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  jobs:
+  - job: BuildAndPushContainer
+    displayName: 'Build and Push Docker Container'
+    steps:
+    - task: Docker@2
+      displayName: 'Build Docker image'
+      inputs:
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        repository: 'rag-agent'
+        command: 'build'
+        Dockerfile: '$(workingDirectory)/Dockerfile'
+        tags: |
+          $(Build.BuildId)
+          latest
+    
+    - task: Docker@2
+      displayName: 'Push Docker image'
+      inputs:
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        repository: 'rag-agent'
+        command: 'push'
+        tags: |
+          $(Build.BuildId)
+          latest
+    
+    - task: AzureContainerInstances@0
+      displayName: 'Deploy to Azure Container Instances'
+      inputs:
+        azureSubscription: '$(azureServiceConnection)'
+        resourceGroupName: '$(resourceGroupName)'
+        location: '$(location)'
+        imageSource: 'specificImage'
+        imageName: '$(containerRegistry)/rag-agent:$(Build.BuildId)'
+        containerName: 'rag-agent-$(Build.BuildId)'
+        osType: 'Linux'
+        numberCores: '2'
+        memory: '4'
+        ports: '8001'
+        environmentVariables: |
+          AZURE_OPENAI_ENDPOINT $(AZURE_OPENAI_ENDPOINT)
+          AZURE_OPENAI_API_KEY $(AZURE_OPENAI_API_KEY)
+          AZURE_OPENAI_API_VERSION $(AZURE_OPENAI_API_VERSION)
+          AZURE_OPENAI_DEPLOYMENT_NAME $(AZURE_OPENAI_DEPLOYMENT_NAME)
+          AZURE_OPENAI_EMBEDDING_DEPLOYMENT $(AZURE_OPENAI_EMBEDDING_DEPLOYMENT) 

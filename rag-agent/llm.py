@@ -1,6 +1,6 @@
 import os
 from typing import List, Dict, Optional
-from openai import OpenAI
+from openai import AzureOpenAI
 from dotenv import load_dotenv
 import logging
 
@@ -10,24 +10,33 @@ logger = logging.getLogger(__name__)
 # Load environment variables
 load_dotenv()
 
-# Initialize OpenAI client
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
 class LLMHandler:
-    def __init__(self, model_name: str = "gpt-3.5-turbo"):
+    def __init__(self, model_name: str = None):
         """
-        Initialize the LLM handler.
+        Initialize the LLM handler with Azure OpenAI.
         
         Args:
-            model_name: Name of the OpenAI model to use
+            model_name: Name of the Azure OpenAI deployment (will use env var if not provided)
         """
-        self.api_key = os.getenv("OPENAI_API_KEY")
+        self.endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
+        self.api_key = os.getenv("AZURE_OPENAI_API_KEY")
+        self.api_version = os.getenv("AZURE_OPENAI_API_VERSION", "2024-12-01-preview")
+        self.deployment_name = model_name or os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME", "gpt-4o")
+        
+        if not self.endpoint:
+            raise ValueError("AZURE_OPENAI_ENDPOINT not found in environment variables")
         if not self.api_key:
-            raise ValueError("OPENAI_API_KEY not found in environment variables")
+            raise ValueError("AZURE_OPENAI_API_KEY not found in environment variables")
+        if not self.deployment_name:
+            raise ValueError("AZURE_OPENAI_DEPLOYMENT_NAME not found in environment variables")
             
-        self.client = OpenAI(api_key=self.api_key)
-        self.model_name = model_name
-        logger.info(f"LLM handler initialized with model: {model_name}")
+        # Initialize Azure OpenAI client
+        self.client = AzureOpenAI(
+            api_key=self.api_key,
+            api_version=self.api_version,
+            azure_endpoint=self.endpoint
+        )
+        logger.info(f"Azure OpenAI LLM handler initialized with deployment: {self.deployment_name}")
     
     def generate_response(self, 
                          query: str, 
@@ -35,7 +44,7 @@ class LLMHandler:
                          conversation_history: Optional[str] = None,
                          chat_history: Optional[List[Dict]] = None) -> Dict:
         """
-        Generate a response using the LLM.
+        Generate a response using Azure OpenAI.
         
         Args:
             query: User query
@@ -104,9 +113,9 @@ For document comparisons, use this format:
 Always ensure tables are properly aligned and formatted for readability.
 """
 
-            # Single response
+            # Single response using Azure OpenAI
             response = self.client.chat.completions.create(
-                model=self.model_name,
+                model=self.deployment_name,
                 messages=[
                     {"role": "system", "content": system_message},
                     {"role": "user", "content": query}
@@ -116,5 +125,5 @@ Always ensure tables are properly aligned and formatted for readability.
             )
             return {"responses": [response.choices[0].message.content.strip()], "audio": None}
         except Exception as e:
-            logger.error(f"Error generating response: {str(e)}")
+            logger.error(f"Error generating response with Azure OpenAI: {str(e)}")
             return {"responses": ["I apologize, but I encountered an error while generating the response. Please try again."], "audio": None}
