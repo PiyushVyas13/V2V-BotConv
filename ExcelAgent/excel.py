@@ -5,20 +5,30 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from openai import OpenAI
+from openai import AzureOpenAI
 import json
 from datetime import datetime, timedelta
 from sharepoint import download_excel, upload_excel
 from typing import Optional
 import uuid
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+# Initialize Azure OpenAI client
+client = AzureOpenAI(
+    api_key=os.getenv("AZURE_OPENAI_API_KEY"),
+    api_version=os.getenv("AZURE_OPENAI_API_VERSION", "2024-02-15-preview"),
+    azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT")
+)
 
 
 EXCEL_FILE = "contracts.xlsx"
-SHAREPOINT_SYNC_ENABLED = True
+SHAREPOINT_SYNC_ENABLED = False
 
 HEADERS = [
     "Sr. No.",
@@ -235,7 +245,7 @@ Input: "{user_input}"
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model=os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME", "gpt-4o"),
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_input}
@@ -385,8 +395,6 @@ async def get_sheets_mode():
     }
 
 if __name__ == "__main__":
-    import dotenv
-    dotenv.load_dotenv()
     import uvicorn
     initialize_excel()
     uvicorn.run(app, host="0.0.0.0", port=8005)

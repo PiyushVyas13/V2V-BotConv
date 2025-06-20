@@ -7,7 +7,7 @@ on:
     branches: 
       [ main ]
     paths:
-    - '**'
+    - 'ExcelAgent/**'
     - '.github/workflows/pgp-excel-agent-AutoDeployTrigger-b72ad534-1023-4c15-935b-e3358bf1503a.yml'
 
   # Allow manual trigger 

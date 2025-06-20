@@ -7,7 +7,7 @@ on:
     branches: 
       [ main ]
     paths:
-    - '**'
+    - 'rag-agent/**'
     - '.github/workflows/pgp-gpt-AutoDeployTrigger-a80b7673-da44-4c19-b1e0-8ea543c213bf.yml'
 
   # Allow manual trigger 
