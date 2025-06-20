@@ -183,7 +183,7 @@ def update_excel(data, update_existing=False):
     duplicate_info = check_duplicate(data, ws)
     
     if duplicate_info["full_duplicate"]:
-        return False, f"Exact duplicate found at row {duplicate_info['row']}"
+        return False, f"Exact duplicate found at row {duplicate_info['row']}", None
 
     if duplicate_info["sr_no_duplicate"]:
         if update_existing:
@@ -196,7 +196,7 @@ def update_excel(data, update_existing=False):
                 ws.cell(row=row_idx, column=col_idx, value=data.get(header, ""))
             print(f"✅ Updated existing row {row_idx} with new data")
         else:
-            return False, f"Duplicate Sr. No. found at row {duplicate_info['row']}"
+            return False, f"Duplicate Sr. No. found at row {duplicate_info['row']}", None
     else:
         row = [data.get(header, "") for header in HEADERS]
         ws.append(row)
@@ -204,14 +204,14 @@ def update_excel(data, update_existing=False):
     try:
         wb.save(EXCEL_FILE)
     except Exception as e:
-        return False, f"Failed to save local file: {str(e)}"
+        return False, f"Failed to save local file: {str(e)}", None
     
     upload_success, upload_message, url = sync_to_sharepoint()
     if not upload_success:
         print(f"⚠  Local file updated but SharePoint sync failed: {upload_message}")
-        return True, f"Success (local). SharePoint sync failed: {upload_message}"
+        return True, f"Success (local). SharePoint sync failed: {upload_message}", None
     
-    return True, "Success (synced to SharePoint) " , url
+    return True, "Success (synced to SharePoint)", url
 
 def parse_input_with_llm(user_input):
     system_prompt = f"""
